@@ -74,6 +74,7 @@ void ARupturePlayerCharacter::SetupPlayerInputComponent(class UInputComponent* P
         EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ARupturePlayerCharacter::Look);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &ARupturePlayerCharacter::StartFire);
 		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &ARupturePlayerCharacter::StopFire);
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &ARupturePlayerCharacter::Reload);
         
     }
 }
@@ -120,5 +121,13 @@ void ARupturePlayerCharacter::StopFire(const struct FInputActionValue& Value)
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->StopFire();
+	}
+}
+
+void ARupturePlayerCharacter::Reload(const struct FInputActionValue& Value)
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Reload();
 	}
 }

@@ -42,11 +42,15 @@ class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
 		UPROPERTY(EditDefaultsOnly, Category = "Input")
 		class UInputAction* FireAction;
 
+		UPROPERTY(EditDefaultsOnly, Category = "Input")
+		class UInputAction* ReloadAction;
+
 		void Move(const struct FInputActionValue& Value);
 		void Look(const struct FInputActionValue& Value);
 
 		void StartFire(const struct FInputActionValue& Value);
 		void StopFire(const struct FInputActionValue& Value);
+		void Reload(const struct FInputActionValue& Value);
 
 		UPROPERTY(EditDefaultsOnly, Category = "Combat")
 		TSubclassOf<ARuptureWeaponBase> StartingWeaponClass;

@@ -20,14 +20,17 @@ ARuptureWeaponBase::ARuptureWeaponBase()
 void ARuptureWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentAmmo = MaxMagazineAmmo;
 }
 
 void ARuptureWeaponBase::StartFire()
 {
-	Fire();
-
-	// 2. Liga o cronômetro para ficar repetindo a função Fire() baseado no seu FireRate
-	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ARuptureWeaponBase::Fire, FireRate, true);
+	if (CanFire())
+	{
+		Fire();
+		// 2. Liga o cronômetro para ficar repetindo a função Fire() baseado no seu FireRate
+		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ARuptureWeaponBase::Fire, FireRate, true);
+	}
 }
 
 void ARuptureWeaponBase::StopFire()
@@ -42,6 +45,13 @@ void ARuptureWeaponBase::Fire()
 	{
 		return; // Ainda não passou o tempo suficiente desde o último disparo
 	}
+
+	if (!CanFire())
+	{
+		StopFire(); // Para de atirar se não houver munição
+		return;
+	}
+
 	LastFireTime = CurrentTime;
 
 	// Extrai quem é o dono da arma e busca a câmera direto do cérebro (Controller) dele
@@ -56,6 +66,8 @@ void ARuptureWeaponBase::Fire()
 	FVector CameraForward = CameraRotation.Vector();
 
 	FVector EndLocation = CameraLocation + (CameraForward * MaxRange);
+
+	CurrentAmmo--;
 
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
@@ -108,4 +120,21 @@ void ARuptureWeaponBase::Fire()
 			true
 		);
 	}
+}
+
+bool ARuptureWeaponBase::CanFire() const
+{
+	return CurrentAmmo > 0;
+}
+
+void ARuptureWeaponBase::Reload()
+{
+	if (CurrentAmmo < MaxMagazineAmmo && MaxReserveAmmo > 0)
+	{
+		int32 AmmoNeeded = MaxMagazineAmmo - CurrentAmmo;
+		int32 AmmoToReload = FMath::Min(AmmoNeeded, MaxReserveAmmo);
+		CurrentAmmo += AmmoToReload;
+		MaxReserveAmmo -= AmmoToReload;
+	}
+
 }

@@ -17,7 +17,7 @@ public:
 
 	void StartFire();
 	void StopFire();
-
+	void Reload();
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,6 +42,17 @@ protected:
 
 	FTimerHandle FireTimerHandle;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Properties")
+	int32 MaxMagazineAmmo = 30;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Properties")
+	int32 CurrentAmmo;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Properties")
+	int32 MaxReserveAmmo = 90;
+
+	bool CanFire() const;
+
 	//FX
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties")
 	class UNiagaraSystem* MuzzleFlash;
@@ -57,3 +68,5 @@ protected:
 	class USoundBase* FireSound;
 
 };
+
+
