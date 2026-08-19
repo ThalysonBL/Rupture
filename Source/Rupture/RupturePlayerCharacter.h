@@ -1,0 +1,56 @@
+#pragma once
+
+#include "CoreMinimal.h"
+#include "RuptureBaseCharacter.h"
+#include "RupturePlayerCharacter.generated.h"
+
+class ARuptureWeaponBase;
+
+UCLASS()
+class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
+{
+	GENERATED_BODY()
+
+	public:
+		ARupturePlayerCharacter();
+
+
+	protected:
+		virtual void BeginPlay() override;
+
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		class USpringArmComponent* SpringArm;
+
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+		class UCameraComponent* FollowCamera;
+
+		virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+		//Input
+		UPROPERTY(EditDefaultsOnly, Category = "Input")
+		class UInputMappingContext* InputMappingContext;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Input")
+		class UInputAction* MoveAction;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Input")
+		class UInputAction* LookAction;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Input")
+		class UInputAction* JumpAction;
+
+		UPROPERTY(EditDefaultsOnly, Category = "Input")
+		class UInputAction* FireAction;
+
+		void Move(const struct FInputActionValue& Value);
+		void Look(const struct FInputActionValue& Value);
+
+		void StartFire(const struct FInputActionValue& Value);
+		void StopFire(const struct FInputActionValue& Value);
+
+		UPROPERTY(EditDefaultsOnly, Category = "Combat")
+		TSubclassOf<ARuptureWeaponBase> StartingWeaponClass;
+
+		UPROPERTY()
+		ARuptureWeaponBase* CurrentWeapon;
+};
