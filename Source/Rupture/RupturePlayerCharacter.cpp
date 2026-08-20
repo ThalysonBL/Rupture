@@ -9,11 +9,14 @@
 
 ARupturePlayerCharacter::ARupturePlayerCharacter()
 {
+	PrimaryActorTick.bCanEverTick = true;
+
     bUseControllerRotationYaw = true;
     bUseControllerRotationPitch = false;
     bUseControllerRotationRoll = false;
 
-    GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->bOrientRotationToMovement = false;
+
     // Define a velocidade dessa rotação (Pitch, Yaw, Roll). 500 no Yaw dá um giro bem fluido.
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 
@@ -21,7 +24,7 @@ ARupturePlayerCharacter::ARupturePlayerCharacter()
     SpringArm->SetupAttachment(RootComponent);
     SpringArm->TargetArmLength = 300.0f;
     
-	SpringArm->SocketOffset = FVector(0.0f, 70.0f, 50.0f);
+	SpringArm->SocketOffset = FVector(0.0f, 70.0f, 55.0f);
 
     //braços devem mexer junto com a camera
     SpringArm->bUsePawnControlRotation = true;
@@ -59,6 +62,13 @@ void ARupturePlayerCharacter::BeginPlay()
             Subsystem->AddMappingContext(InputMappingContext, 0);
         }
     }
+}
+
+void ARupturePlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	// Atualiza o AimPitch para a animação
+	AimPitch = GetBaseAimRotation().Pitch;
 }
 
 void ARupturePlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)

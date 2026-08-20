@@ -17,6 +17,7 @@ class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
 
 	protected:
 		virtual void BeginPlay() override;
+		virtual void Tick(float DeltaTime) override;
 
 		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 		class USpringArmComponent* SpringArm;
@@ -57,4 +58,7 @@ class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
 
 		UPROPERTY()
 		ARuptureWeaponBase* CurrentWeapon;
+
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
+		float AimPitch;
 };
