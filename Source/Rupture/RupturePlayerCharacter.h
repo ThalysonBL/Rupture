@@ -56,7 +56,7 @@ class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
 		UPROPERTY(EditDefaultsOnly, Category = "Combat")
 		TSubclassOf<ARuptureWeaponBase> StartingWeaponClass;
 
-		UPROPERTY()
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 		ARuptureWeaponBase* CurrentWeapon;
 
 		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")

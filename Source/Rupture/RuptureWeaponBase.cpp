@@ -21,6 +21,11 @@ void ARuptureWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	CurrentAmmo = MaxMagazineAmmo;
+	
+	if (OnAmmoChanged.IsBound())
+	{
+		OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
+	}
 }
 
 void ARuptureWeaponBase::StartFire()
@@ -68,6 +73,8 @@ void ARuptureWeaponBase::Fire()
 	FVector EndLocation = CameraLocation + (CameraForward * MaxRange);
 
 	CurrentAmmo--;
+
+	OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
 
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
@@ -135,6 +142,11 @@ void ARuptureWeaponBase::Reload()
 		int32 AmmoToReload = FMath::Min(AmmoNeeded, MaxReserveAmmo);
 		CurrentAmmo += AmmoToReload;
 		MaxReserveAmmo -= AmmoToReload;
+
+		if (OnAmmoChanged.IsBound())
+		{
+			OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
+		}
 	}
 
 }

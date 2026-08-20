@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "RuptureWeaponBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChangedSignature, int32, CurrentAmmo, int32, MaxAmmo);
+
 UCLASS()
 class RUPTURE_API ARuptureWeaponBase : public AActor
 {
@@ -18,6 +20,9 @@ public:
 	void StartFire();
 	void StopFire();
 	void Reload();
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnAmmoChangedSignature OnAmmoChanged;
 
 protected:
 	// Called when the game starts or when spawned
