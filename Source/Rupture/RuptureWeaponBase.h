@@ -45,6 +45,12 @@ protected:
 
 	void Fire();
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combat|Recoil")
+	float VerticalRecoil = 0.15f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Combat|Recoil")
+	float HorizontalRecoil = 0.05f;
+
 	FTimerHandle FireTimerHandle;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon Properties")

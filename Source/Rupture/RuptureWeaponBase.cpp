@@ -21,7 +21,7 @@ void ARuptureWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	CurrentAmmo = MaxMagazineAmmo;
-	
+
 	if (OnAmmoChanged.IsBound())
 	{
 		OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
@@ -73,7 +73,6 @@ void ARuptureWeaponBase::Fire()
 	FVector EndLocation = CameraLocation + (CameraForward * MaxRange);
 
 	CurrentAmmo--;
-
 	OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
 
 	if (FireCameraShakeClass)
@@ -83,6 +82,10 @@ void ARuptureWeaponBase::Fire()
 			PC->ClientStartCameraShake(FireCameraShakeClass);
 		}
 	}
+	OwnerPawn->AddControllerPitchInput(-VerticalRecoil);
+	//variação lateral
+	float RandomYaw = FMath::RandRange(-HorizontalRecoil, HorizontalRecoil);
+	OwnerPawn->AddControllerYawInput(RandomYaw);
 
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
