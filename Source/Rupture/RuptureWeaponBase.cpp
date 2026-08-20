@@ -76,6 +76,14 @@ void ARuptureWeaponBase::Fire()
 
 	OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
 
+	if (FireCameraShakeClass)
+	{
+		if (APlayerController* PC = Cast<APlayerController>(OwnerPawn->GetController()))
+		{
+			PC->ClientStartCameraShake(FireCameraShakeClass);
+		}
+	}
+
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this);

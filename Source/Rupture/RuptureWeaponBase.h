@@ -72,6 +72,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties")
 	class USoundBase* FireSound;
 
+	//Shake Cam
+	UPROPERTY(EditDefaultsOnly, Category = "Combat|Feedback")
+	TSubclassOf<class UCameraShakeBase> FireCameraShakeClass;
+
+
+
 };
 
 

@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
+#include "Blueprint/UserWidget.h"
 
 ARupturePlayerCharacter::ARupturePlayerCharacter()
 {
@@ -62,6 +63,15 @@ void ARupturePlayerCharacter::BeginPlay()
             Subsystem->AddMappingContext(InputMappingContext, 0);
         }
     }
+
+	if (AmmoHUDClass)
+	{
+		AmmoHUDInstance = CreateWidget<UUserWidget>(GetWorld(), AmmoHUDClass);
+		if (AmmoHUDInstance)
+		{
+			AmmoHUDInstance->AddToViewport();
+		}
+	}
 }
 
 void ARupturePlayerCharacter::Tick(float DeltaTime)
