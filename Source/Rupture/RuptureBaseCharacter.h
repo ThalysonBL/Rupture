@@ -12,7 +12,8 @@ class RUPTURE_API ARuptureBaseCharacter : public ACharacter
 public:
 	ARuptureBaseCharacter();
 	virtual void BeginPlay() override;
-
+	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
 	UFUNCTION()
@@ -20,10 +21,5 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UHealthComponent* HealthComponent;
-
-public:	
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 };

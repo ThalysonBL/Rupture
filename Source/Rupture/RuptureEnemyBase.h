@@ -29,4 +29,7 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void FireWeapon();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	class UBehaviorTree* EnemyBehaviorTree;
 };

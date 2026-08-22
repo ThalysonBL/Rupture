@@ -65,10 +65,4 @@ class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
 
 		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
 		float AimPitch;
-
-		UPROPERTY(EditDefaultsOnly, Category = "UI")
-		TSubclassOf<class UUserWidget> AmmoHUDClass;
-
-		UPROPERTY()
-		class UUserWidget* AmmoHUDInstance;
 };
