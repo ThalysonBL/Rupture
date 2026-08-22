@@ -10,16 +10,18 @@ UCLASS()
 class RUPTURE_API ARuptureHUD : public AHUD
 {
 	GENERATED_BODY()
-
-public:
+	
+protected:
 	virtual void BeginPlay() override;
 
-protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<class UUserWidget> PlayerHUDClass;
+	TSubclassOf<class URupturePlayerHUDWidget> PlayerHUDClass;
 
-	//ponteiro que vai guardar o widget criado em memoria
 	UPROPERTY()
-	class UUserWidget* PlayerHUDWidget;;
+	class URupturePlayerHUDWidget* PlayerHUDWidget;
+
+	// Callback do evento de vida (Obrigatório UFUNCTION)
+	UFUNCTION()
+	void OnPlayerHealthChanged(float NewHealth);
 	
 };

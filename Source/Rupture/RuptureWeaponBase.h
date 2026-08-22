@@ -23,6 +23,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnAmmoChangedSignature OnAmmoChanged;
+	
+	void Fire();
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,8 +44,6 @@ protected:
 	float FireRate = 0.2f;
 
 	float LastFireTime;
-
-	void Fire();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Recoil")
 	float VerticalRecoil = 0.15f;
