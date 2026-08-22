@@ -1,6 +1,7 @@
 #include "RuptureEnemyBase.h"
 #include "HealthComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void ARuptureEnemyBase::BeginPlay()
 {
@@ -27,6 +28,18 @@ void ARuptureEnemyBase::BeginPlay()
 			// Gruda a arma no esqueleto (Mesh) do personagem, no socket "WeaponSocket"
 			CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("WeaponSocket"));
 		}
+	}
+}
+
+ARuptureEnemyBase::ARuptureEnemyBase()
+{
+	bUseControllerRotationYaw = false;
+	
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.f, 150.f, 0.f);
 	}
 }
 
