@@ -7,6 +7,8 @@
 #include "RupturePlayerHUDWidget.generated.h"
 
 class UProgressBar;
+class UTextBlock;
+
 UCLASS()
 class RUPTURE_API URupturePlayerHUDWidget : public UUserWidget
 {
@@ -14,9 +16,17 @@ class RUPTURE_API URupturePlayerHUDWidget : public UUserWidget
 	
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-    	UProgressBar* pb_Health;
+    UProgressBar* pb_Health;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* txt_CurrentAmmo;
+	
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	UTextBlock* txt_ReserveAmmo;
     
-    	// Função chamada pelo Observer
-    	void UpdateHealth(float CurrentHealth, float MaxHealth);
+    // call function in Observer
+    void UpdateHealth(float CurrentHealth, float MaxHealth);
+	
+	void UpdateAmmo(int32 CurrentAmmo, int32 ReserveAmmo);
 	
 };

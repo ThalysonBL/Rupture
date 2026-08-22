@@ -6,6 +6,8 @@
 
 class ARuptureWeaponBase;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeaponEquippedSignature, ARuptureWeaponBase*, EquippedWeapon);
+
 UCLASS()
 class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
 {
@@ -13,7 +15,9 @@ class RUPTURE_API ARupturePlayerCharacter : public ARuptureBaseCharacter
 
 	public:
 		ARupturePlayerCharacter();
-
+	
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FOnWeaponEquippedSignature OnWeaponEquipped;
 
 	protected:
 		virtual void BeginPlay() override;

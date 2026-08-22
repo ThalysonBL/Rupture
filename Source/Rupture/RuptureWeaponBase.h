@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "RuptureWeaponBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChangedSignature, int32, CurrentAmmo, int32, MaxAmmo);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChangedSignature, int32, CurrentAmmo, int32, ReserveAmmo);
 
 UCLASS()
 class RUPTURE_API ARuptureWeaponBase : public AActor
@@ -25,6 +25,12 @@ public:
 	FOnAmmoChangedSignature OnAmmoChanged;
 	
 	void Fire();
+	
+	UFUNCTION(BlueprintPure, Category = "Ammo")
+	int32 GetCurrentAmmo() const;
+
+	UFUNCTION(BlueprintPure, Category = "Ammo")
+	int32 GetReserveAmmo() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -61,6 +67,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon Properties")
 	int32 MaxReserveAmmo = 90;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon Properties")
+	int32 ReserveAmmo;
 
 	bool CanFire() const;
 

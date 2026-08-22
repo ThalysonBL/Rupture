@@ -11,6 +11,14 @@ class RUPTURE_API ARuptureHUD : public AHUD
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION()
+	void OnWeaponEquippedCallback(class ARuptureWeaponBase* NewWeapon);
+
+	// Callback que escuta os tiros e reloads (OBRIGATÓRIO ter UFUNCTION)
+	UFUNCTION()
+	void OnAmmoChangedCallback(int32 CurrentAmmo, int32 ReserveAmmo);
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -23,5 +31,4 @@ protected:
 	// Callback do evento de vida (Obrigatório UFUNCTION)
 	UFUNCTION()
 	void OnPlayerHealthChanged(float NewHealth);
-	
 };

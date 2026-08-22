@@ -21,10 +21,11 @@ void ARuptureWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 	CurrentAmmo = MaxMagazineAmmo;
+	ReserveAmmo = MaxReserveAmmo;
 
 	if (OnAmmoChanged.IsBound())
 	{
-		OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
+		OnAmmoChanged.Broadcast(CurrentAmmo, ReserveAmmo);
 	}
 }
 
@@ -73,7 +74,7 @@ void ARuptureWeaponBase::Fire()
 	FVector EndLocation = CameraLocation + (CameraForward * MaxRange);
 
 	CurrentAmmo--;
-	OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
+	OnAmmoChanged.Broadcast(CurrentAmmo, ReserveAmmo);
 
 	if (FireCameraShakeClass)
 	{
@@ -119,7 +120,7 @@ void ARuptureWeaponBase::Fire()
 		}
 	}
 
-	DrawDebugLine(GetWorld(), CameraLocation, bHit ? HitResult.ImpactPoint : EndLocation, FColor::Red, false, 1.0f, 0, 1.0f);
+	// DrawDebugLine(GetWorld(), CameraLocation, bHit ? HitResult.ImpactPoint : EndLocation, FColor::Red, false, 1.0f, 0, 1.0f);
 
 	if (FireSound)
 	{
@@ -147,17 +148,26 @@ bool ARuptureWeaponBase::CanFire() const
 
 void ARuptureWeaponBase::Reload()
 {
-	if (CurrentAmmo < MaxMagazineAmmo && MaxReserveAmmo > 0)
+	if (CurrentAmmo < MaxMagazineAmmo && ReserveAmmo > 0)
 	{
 		int32 AmmoNeeded = MaxMagazineAmmo - CurrentAmmo;
-		int32 AmmoToReload = FMath::Min(AmmoNeeded, MaxReserveAmmo);
+		int32 AmmoToReload = FMath::Min(AmmoNeeded, ReserveAmmo);
 		CurrentAmmo += AmmoToReload;
-		MaxReserveAmmo -= AmmoToReload;
+		ReserveAmmo -= AmmoToReload;
 
 		if (OnAmmoChanged.IsBound())
 		{
-			OnAmmoChanged.Broadcast(CurrentAmmo, MaxMagazineAmmo);
+			OnAmmoChanged.Broadcast(CurrentAmmo, ReserveAmmo);
 		}
 	}
+}
 
+int32 ARuptureWeaponBase::GetCurrentAmmo() const
+{
+	return CurrentAmmo; 
+}
+
+int32 ARuptureWeaponBase::GetReserveAmmo() const
+{
+	return ReserveAmmo; 
 }

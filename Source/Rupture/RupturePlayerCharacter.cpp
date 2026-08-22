@@ -53,6 +53,7 @@ void ARupturePlayerCharacter::BeginPlay()
 
             // Gruda a arma no esqueleto (Mesh) do personagem, no socket "WeaponSocket"
             CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("WeaponSocket"));
+			OnWeaponEquipped.Broadcast(CurrentWeapon);
         }
 	}
 
@@ -63,15 +64,6 @@ void ARupturePlayerCharacter::BeginPlay()
             Subsystem->AddMappingContext(InputMappingContext, 0);
         }
     }
-
-	if (AmmoHUDClass)
-	{
-		AmmoHUDInstance = CreateWidget<UUserWidget>(GetWorld(), AmmoHUDClass);
-		if (AmmoHUDInstance)
-		{
-			AmmoHUDInstance->AddToViewport();
-		}
-	}
 }
 
 void ARupturePlayerCharacter::Tick(float DeltaTime)

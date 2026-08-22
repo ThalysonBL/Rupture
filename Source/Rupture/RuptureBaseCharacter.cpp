@@ -1,6 +1,7 @@
 #include "RuptureBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HealthComponent.h"
+#include "Components/CapsuleComponent.h"
 
 
 ARuptureBaseCharacter::ARuptureBaseCharacter()
@@ -16,6 +17,10 @@ ARuptureBaseCharacter::ARuptureBaseCharacter()
 void ARuptureBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	if (HealthComponent)
+	{
+		HealthComponent->OnDeath.AddDynamic(this, &ARuptureBaseCharacter::Die);
+	}
 }
 
 void ARuptureBaseCharacter::Tick(float DeltaTime)
@@ -30,5 +35,21 @@ void ARuptureBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 void ARuptureBaseCharacter::Die()
 {
-	UE_LOG(LogTemp, Warning, TEXT("O personagem morreu!"));
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	GetMesh()->SetCollisionProfileName(TEXT("ragdoll"));
+	GetMesh()->SetSimulatePhysics(true);
+	
+	// 3. Separa os destinos: IA x Jogador
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		// Se for o Player, arranca o teclado/mouse dele, mas mantém a câmera
+		DisableInput(PC);
+	}
+	else if (AController* AIController = GetController())
+	{
+		// Se for a Inteligência Artificial, ejeta a "mente" do corpo
+		// Isso faz a Behavior Tree parar de rodar imediatamente
+		AIController->UnPossess();
+	}
 }

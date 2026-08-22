@@ -11,10 +11,12 @@ class RUPTURE_API ARuptureBaseCharacter : public ACharacter
 
 public:
 	ARuptureBaseCharacter();
+	virtual void BeginPlay() override;
+
 
 protected:
-	virtual void BeginPlay() override;
-	void Die();
+	UFUNCTION()
+	virtual void Die();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class UHealthComponent* HealthComponent;
