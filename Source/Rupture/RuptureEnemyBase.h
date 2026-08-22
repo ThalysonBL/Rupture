@@ -16,6 +16,7 @@ class RUPTURE_API ARuptureEnemyBase : public ARuptureBaseCharacter
 
 protected:
 	virtual void BeginPlay() override;
+	ARuptureEnemyBase();
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TSubclassOf<class ARuptureWeaponBase> StartingWeaponClass;
@@ -27,7 +28,6 @@ protected:
 	void HandleDeath() const;
 	
 public:
-	ARuptureEnemyBase();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void FireWeapon();
 
