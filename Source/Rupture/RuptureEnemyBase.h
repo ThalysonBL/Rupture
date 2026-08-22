@@ -25,7 +25,7 @@ protected:
 	ARuptureWeaponBase* CurrentWeapon;
 
 	UFUNCTION()
-	void HandleDeath() const;
+	void HandleDeath();
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")

@@ -120,7 +120,7 @@ void ARuptureWeaponBase::Fire()
 		}
 	}
 
-	// DrawDebugLine(GetWorld(), CameraLocation, bHit ? HitResult.ImpactPoint : EndLocation, FColor::Red, false, 1.0f, 0, 1.0f);
+	DrawDebugLine(GetWorld(), CameraLocation, bHit ? HitResult.ImpactPoint : EndLocation, FColor::Red, false, 1.0f, 0, 1.0f);
 
 	if (FireSound)
 	{

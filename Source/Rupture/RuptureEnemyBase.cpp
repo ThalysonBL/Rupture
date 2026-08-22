@@ -43,13 +43,20 @@ ARuptureEnemyBase::ARuptureEnemyBase()
 	}
 }
 
-void ARuptureEnemyBase::HandleDeath() const
+void ARuptureEnemyBase::HandleDeath()
 {
 	// Desliga a colis�o do corpo invis�vel (c�psula)
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	// Ativa a gravidade na malha para o boneco desabar no ch�o (Ragdoll)
 	GetMesh()->SetSimulatePhysics(true);
+
+	DetachFromControllerPendingDestroy();
+
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Destroy();
+	}
 }
 
 void ARuptureEnemyBase::FireWeapon()
