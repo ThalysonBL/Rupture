@@ -27,7 +27,7 @@ protected:
 	void HandleDeath() const;
 	
 public:
-	void ARuptureEnemyBase();
+	ARuptureEnemyBase();
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void FireWeapon();
 
