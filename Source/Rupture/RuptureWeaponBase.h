@@ -19,6 +19,8 @@ public:
 
 	void StartFire();
 	void StopFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon Properties")
 	void Reload();
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
