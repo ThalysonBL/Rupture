@@ -21,7 +21,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TSubclassOf<class ARuptureWeaponBase> StartingWeaponClass;
     
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	ARuptureWeaponBase* CurrentWeapon;
 
 	UFUNCTION()
