@@ -69,9 +69,32 @@ void ARuptureWeaponBase::Fire()
 
 	OwnerPawn->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
+	//FVector CameraForward = CameraRotation.Vector();
+
+	//FVector EndLocation = CameraLocation + (CameraForward * MaxRange);
+
 	FVector CameraForward = CameraRotation.Vector();
 
-	FVector EndLocation = CameraLocation + (CameraForward * MaxRange);
+	// 1. Configura a dispersão (Spread) com base em quem está segurando a arma
+	float SpreadInDegrees = 0.0f;
+
+	if (OwnerPawn->GetController()->IsPlayerController())
+	{
+		SpreadInDegrees = 0.5f;
+	}
+	else
+	{
+		SpreadInDegrees = 4.5f;
+	}
+
+	// 2. Converte para Radianos (que é o formato que a matemática da Unreal exige)
+	float SpreadInRadians = FMath::DegreesToRadians(SpreadInDegrees);
+
+	// 3. Calcula a nova direção aplicando o cone de erro
+	FVector FinalShootDirection = FMath::VRandCone(CameraForward, SpreadInRadians);
+
+	// 4. Define o destino final do LineTrace usando a direção com erro
+	FVector EndLocation = CameraLocation + (FinalShootDirection * MaxRange);
 
 	CurrentAmmo--;
 	OnAmmoChanged.Broadcast(CurrentAmmo, ReserveAmmo);
