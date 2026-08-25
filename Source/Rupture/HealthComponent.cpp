@@ -38,3 +38,10 @@ void UHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage, c
 		OnDeath.Broadcast();
 	}
 }
+
+void UHealthComponent::ResetHealth()
+{
+	bIsDead = false;
+	CurrentHealth = MaxHealth;
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
+}

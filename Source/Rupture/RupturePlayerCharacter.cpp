@@ -5,8 +5,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
+#include "HealthComponent.h"
 #include "InputActionValue.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/CapsuleComponent.h"
 
 ARupturePlayerCharacter::ARupturePlayerCharacter()
 {
@@ -142,4 +144,32 @@ void ARupturePlayerCharacter::Reload(const struct FInputActionValue& Value)
 	{
 		CurrentWeapon->Reload();
 	}
+}
+
+void ARupturePlayerCharacter::Revive()
+{
+	if (HealthComponent)
+	{
+		HealthComponent->ResetHealth();
+	}
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	
+	// Desliga ragdoll
+	GetMesh()->SetSimulatePhysics(false);
+	GetMesh()->SetCollisionProfileName(TEXT("CharacterMesh"));
+	GetMesh()->AttachToComponent(
+		GetCapsuleComponent(),
+		FAttachmentTransformRules::SnapToTargetNotIncludingScale
+	);
+	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f)); // ajuste se seu mesh usa outro offset
+	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));   // típico mannequin
+	if (UCharacterMovementComponent* MoveComp = GetCharacterMovement())
+	{
+		MoveComp->SetMovementMode(MOVE_Walking);
+	}
+	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	{
+		EnableInput(PC);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Player: Revive() concluído."));
 }

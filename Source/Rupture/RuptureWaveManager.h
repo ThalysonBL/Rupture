@@ -31,6 +31,15 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Rounds|Events")
 	FOnAllRoundsCompletedSignature OnAllRoundsCompleted;
+	
+	UFUNCTION(BlueprintCallable, Category = "Rounds")
+	void RestartCurrentRound();
+
+	UFUNCTION(BlueprintCallable, Category = "Rounds")
+	void RestartAllRounds();
+
+	UFUNCTION(BlueprintPure, Category = "Rounds")
+	int32 GetCurrentRoundNumber() const { return CurrentRoundIndex + 1; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -85,4 +94,10 @@ protected:
 	
 	UFUNCTION()
 	void StartNextRound();
+	
+	UPROPERTY()
+	TArray<TObjectPtr<ARuptureEnemyBase>> ActiveEnemies;
+	
+	void ClearActiveEnemies();
+	void CancelRoundTimers();
 };

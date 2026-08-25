@@ -26,6 +26,10 @@ public:
 	float GetCurrentHealth() const { return CurrentHealth; }
 	float GetMaxHealth() const { return MaxHealth; }
 	
+	UFUNCTION(Blueprintable, Category = "Health")
+	void ResetHealth();
+	
+	bool IsDead() const { return bIsDead; }
 
 protected:
 	UFUNCTION()
