@@ -37,6 +37,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void FireWeapon();
 
+	/** Para o tiro (timer) da arma — usado na morte do player / limpeza de round. */
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void StopFiring();
+
+	/** Para tiro e destrói a arma equipada (evita armas órfãs no chão). */
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void DestroyEquippedWeapon();
+
 	UFUNCTION(BlueprintPure, Category = "Combat")
 	ARuptureWeaponBase* GetCurrentWeapon() const { return CurrentWeapon; }
 

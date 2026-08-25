@@ -26,7 +26,7 @@ public:
 	float GetCurrentHealth() const { return CurrentHealth; }
 	float GetMaxHealth() const { return MaxHealth; }
 	
-	UFUNCTION(Blueprintable, Category = "Health")
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	void ResetHealth();
 	
 	bool IsDead() const { return bIsDead; }

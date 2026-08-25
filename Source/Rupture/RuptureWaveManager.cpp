@@ -1,6 +1,8 @@
 #include "RuptureWaveManager.h"
 #include "EnemySpawnPortal.h"
 #include "RuptureEnemyBase.h"
+#include "RupturePlayerCharacter.h"
+#include "RuptureWeaponBase.h"
 #include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
@@ -29,6 +31,7 @@ void ARuptureWaveManager::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: BeginPlay iniciado."));
 
 	CollectPortals();
+	BindPlayerDeath();
 
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: portais encontrados = %d"), Portals.Num());
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: Rounds.Num() = %d | StartDelay = %.2f"), Rounds.Num(), StartDelay);
@@ -66,6 +69,71 @@ void ARuptureWaveManager::BeginPlay()
 		StartDelay,
 		false
 	);
+}
+
+void ARuptureWaveManager::BindPlayerDeath()
+{
+	if (ARupturePlayerCharacter* Player = Cast<ARupturePlayerCharacter>(
+		UGameplayStatics::GetPlayerCharacter(this, 0)))
+	{
+		if (UHealthComponent* HealthComp = Player->FindComponentByClass<UHealthComponent>())
+		{
+			HealthComp->OnDeath.AddDynamic(this, &ARuptureWaveManager::OnPlayerDied);
+		}
+	}
+}
+
+void ARuptureWaveManager::OnPlayerDied()
+{
+	UE_LOG(LogTemp, Warning, TEXT("WaveManager: player morreu — parando tiros dos inimigos."));
+	StopAllEnemyFire();
+}
+
+void ARuptureWaveManager::StopAllEnemyFire()
+{
+	for (ARuptureEnemyBase* Enemy : ActiveEnemies)
+	{
+		if (IsValid(Enemy))
+		{
+			Enemy->StopFiring();
+		}
+	}
+}
+
+void ARuptureWaveManager::CollectOrphanWeapons()
+{
+	ARupturePlayerCharacter* Player = Cast<ARupturePlayerCharacter>(
+		UGameplayStatics::GetPlayerCharacter(this, 0));
+	ARuptureWeaponBase* PlayerWeapon = Player ? Player->GetCurrentWeapon() : nullptr;
+
+	TArray<AActor*> FoundWeapons;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARuptureWeaponBase::StaticClass(), FoundWeapons);
+
+	int32 DestroyedCount = 0;
+	for (AActor* Actor : FoundWeapons)
+	{
+		ARuptureWeaponBase* Weapon = Cast<ARuptureWeaponBase>(Actor);
+		if (!IsValid(Weapon) || Weapon == PlayerWeapon)
+		{
+			continue;
+		}
+
+		Weapon->StopFire();
+		Weapon->Destroy();
+		++DestroyedCount;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("WaveManager: armas órfãs destruídas = %d"), DestroyedCount);
+}
+
+void ARuptureWaveManager::RefillPlayerAmmo()
+{
+	if (ARupturePlayerCharacter* Player = Cast<ARupturePlayerCharacter>(
+		UGameplayStatics::GetPlayerCharacter(this, 0)))
+	{
+		Player->RefillWeaponAmmo();
+		UE_LOG(LogTemp, Warning, TEXT("WaveManager: munição do player restaurada (pente cheio)."));
+	}
 }
 
 void ARuptureWaveManager::CollectPortals()
@@ -107,6 +175,9 @@ void ARuptureWaveManager::StartRound(int32 RoundIndex)
 	CurrentRoundIndex = RoundIndex;
 	AliveEnemies = 0;
 	NextPortalIndex = 0;
+
+	// Todo round novo: pente + reserva cheios
+	RefillPlayerAmmo();
 
 	const FRoundDefinition& RoundDef = Rounds[CurrentRoundIndex];
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: iniciando Round %d | Rifleman=%d Brawler=%d"),
@@ -207,15 +278,14 @@ void ARuptureWaveManager::RegisterEnemy(ARuptureEnemyBase* Enemy)
 	{
 		HealthComp->OnDeath.AddDynamic(this, &ARuptureWaveManager::OnEnemyDied);
 	}
-
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("WaveManager: inimigo %s sem HealthComponent."), *Enemy->GetName());
 	}
 
 	AliveEnemies++;
-
 	ActiveEnemies.Add(Enemy);
+
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: inimigo registrado %s | AliveEnemies=%d"),
 		*Enemy->GetName(), AliveEnemies);
 }
@@ -261,8 +331,6 @@ void ARuptureWaveManager::StartNextRound()
 	StartRound(CurrentRoundIndex + 1);
 }
 
-
-
 void ARuptureWaveManager::CancelRoundTimers()
 {
 	GetWorldTimerManager().ClearTimer(StartRoundTimerHandle);
@@ -271,18 +339,25 @@ void ARuptureWaveManager::CancelRoundTimers()
 
 void ARuptureWaveManager::ClearActiveEnemies()
 {
+	CancelRoundTimers();
+	StopAllEnemyFire();
+
 	for (ARuptureEnemyBase* Enemy : ActiveEnemies)
 	{
-		if (Enemy)
+		if (IsValid(Enemy))
 		{
+			Enemy->DestroyEquippedWeapon();
 			Enemy->Destroy();
 		}
 	}
+
 	ActiveEnemies.Reset();
 	AliveEnemies = 0;
 
-	UE_LOG(LogTemp, Warning, TEXT("WaveManager: inimigos limpos."));
+	// Limpa armas que ficaram no chão (ex.: destroy sem HandleDeath)
+	CollectOrphanWeapons();
 
+	UE_LOG(LogTemp, Warning, TEXT("WaveManager: inimigos limpos."));
 }
 
 void ARuptureWaveManager::RestartCurrentRound()
@@ -291,6 +366,7 @@ void ARuptureWaveManager::RestartCurrentRound()
 	ClearActiveEnemies();
 	StartRound(CurrentRoundIndex);
 }
+
 void ARuptureWaveManager::RestartAllRounds()
 {
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: RestartAllRounds"));

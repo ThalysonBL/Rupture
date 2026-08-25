@@ -86,10 +86,26 @@ void ARuptureEnemyBase::EnsureWeaponSpawned()
 
 void ARuptureEnemyBase::HandleDeath()
 {
+	StopFiring();
+	DestroyEquippedWeapon();
+
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetSimulatePhysics(true);
 
 	DetachFromControllerPendingDestroy();
+}
+
+void ARuptureEnemyBase::StopFiring()
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->StopFire();
+	}
+}
+
+void ARuptureEnemyBase::DestroyEquippedWeapon()
+{
+	StopFiring();
 
 	if (CurrentWeapon)
 	{
@@ -100,6 +116,11 @@ void ARuptureEnemyBase::HandleDeath()
 
 void ARuptureEnemyBase::FireWeapon()
 {
+	if (HealthComponent && HealthComponent->IsDead())
+	{
+		return;
+	}
+
 	EnsureWeaponSpawned();
 
 	if (!CurrentWeapon)

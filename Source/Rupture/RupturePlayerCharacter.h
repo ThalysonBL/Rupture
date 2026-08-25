@@ -22,9 +22,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void Revive();
 
+	/** Recarrega pente + reserva ao máximo (novo round). */
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void RefillWeaponAmmo();
+
+	UFUNCTION(BlueprintPure, Category = "Combat")
+	ARuptureWeaponBase* GetCurrentWeapon() const { return CurrentWeapon; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void Die() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class USpringArmComponent* SpringArm;

@@ -88,6 +88,9 @@ protected:
 	
 	UFUNCTION()
 	void OnEnemyDied();
+
+	UFUNCTION()
+	void OnPlayerDied();
 	
 	UFUNCTION()
 	void StartFirstRound();
@@ -100,4 +103,8 @@ protected:
 	
 	void ClearActiveEnemies();
 	void CancelRoundTimers();
+	void StopAllEnemyFire();
+	void CollectOrphanWeapons();
+	void RefillPlayerAmmo();
+	void BindPlayerDeath();
 };

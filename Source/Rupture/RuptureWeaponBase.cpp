@@ -1,4 +1,5 @@
 #include "RuptureWeaponBase.h"
+#include "HealthComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -21,13 +22,13 @@ ARuptureWeaponBase::ARuptureWeaponBase()
 void ARuptureWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	CurrentAmmo = MaxMagazineAmmo;
-	ReserveAmmo = MaxReserveAmmo;
+	ResetAmmoToFull();
+}
 
-	if (OnAmmoChanged.IsBound())
-	{
-		OnAmmoChanged.Broadcast(CurrentAmmo, ReserveAmmo);
-	}
+void ARuptureWeaponBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	StopFire();
+	Super::EndPlay(EndPlayReason);
 }
 
 void ARuptureWeaponBase::StartFire()
@@ -35,14 +36,23 @@ void ARuptureWeaponBase::StartFire()
 	if (CanFire())
 	{
 		Fire();
-		// 2. Liga o cronômetro para ficar repetindo a função Fire() baseado no seu FireRate
 		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ARuptureWeaponBase::Fire, FireRate, true);
 	}
 }
 
 void ARuptureWeaponBase::StopFire()
 {
-	GetWorldTimerManager().ClearTimer(FireTimerHandle);
+	if (UWorld* World = GetWorld())
+	{
+		World->GetTimerManager().ClearTimer(FireTimerHandle);
+	}
+}
+
+void ARuptureWeaponBase::ResetAmmoToFull()
+{
+	CurrentAmmo = MaxMagazineAmmo;
+	ReserveAmmo = MaxReserveAmmo;
+	OnAmmoChanged.Broadcast(CurrentAmmo, ReserveAmmo);
 }
 
 void ARuptureWeaponBase::Fire()
@@ -50,38 +60,61 @@ void ARuptureWeaponBase::Fire()
 	float CurrentTime = GetWorld()->GetTimeSeconds();
 	if (CurrentTime - LastFireTime < FireRate)
 	{
-		return; // Ainda não passou o tempo suficiente desde o último disparo
+		return;
 	}
 
 	if (!CanFire())
 	{
-		StopFire(); // Para de atirar se não houver munição
+		StopFire();
 		return;
 	}
-
-	LastFireTime = CurrentTime;
 
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
 	if (!OwnerPawn || !OwnerPawn->GetController())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Weapon[%s]: Fire abortado — sem Owner/Controller."), *GetName());
+		StopFire();
 		return;
 	}
+
+	// Dono morto (player segurando o gatilho, ou IA) → para o timer de tiro
+	if (UHealthComponent* OwnerHealth = OwnerPawn->FindComponentByClass<UHealthComponent>())
+	{
+		if (OwnerHealth->IsDead())
+		{
+			StopFire();
+			return;
+		}
+	}
+
+	LastFireTime = CurrentTime;
 
 	FVector CameraLocation;
 	FRotator CameraRotation;
 	OwnerPawn->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
-	// IA: mira no foco (player). Sem isso o GetPlayerViewPoint da AI costuma apontar errado.
+	// IA: mira no foco (player). Se o alvo morreu, para de atirar.
 	if (!OwnerPawn->GetController()->IsPlayerController())
 	{
 		if (AAIController* AIController = Cast<AAIController>(OwnerPawn->GetController()))
 		{
-			if (AActor* FocusActor = AIController->GetFocusActor())
+			AActor* FocusActor = AIController->GetFocusActor();
+			if (!FocusActor)
 			{
-				CameraLocation = OwnerPawn->GetActorLocation() + FVector(0.f, 0.f, 60.f);
-				CameraRotation = (FocusActor->GetActorLocation() + FVector(0.f, 0.f, 50.f) - CameraLocation).Rotation();
+				StopFire();
+				return;
 			}
+
+			if (UHealthComponent* FocusHealth = FocusActor->FindComponentByClass<UHealthComponent>())
+			{
+				if (FocusHealth->IsDead())
+				{
+					StopFire();
+					return;
+				}
+			}
+
+			CameraLocation = OwnerPawn->GetActorLocation() + FVector(0.f, 0.f, 60.f);
+			CameraRotation = (FocusActor->GetActorLocation() + FVector(0.f, 0.f, 50.f) - CameraLocation).Rotation();
 		}
 	}
 

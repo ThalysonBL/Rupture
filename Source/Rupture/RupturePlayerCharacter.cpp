@@ -124,6 +124,11 @@ void ARupturePlayerCharacter::Look(const struct FInputActionValue& Value)
 
 void ARupturePlayerCharacter::StartFire(const struct FInputActionValue& Value)
 {
+	if (HealthComponent && HealthComponent->IsDead())
+	{
+		return;
+	}
+
 	if (CurrentWeapon)
 	{
 		CurrentWeapon->StartFire();
@@ -146,30 +151,59 @@ void ARupturePlayerCharacter::Reload(const struct FInputActionValue& Value)
 	}
 }
 
+void ARupturePlayerCharacter::Die()
+{
+	// Para o tiro automático mesmo com o gatilho ainda pressionado
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->StopFire();
+	}
+
+	Super::Die();
+}
+
+void ARupturePlayerCharacter::RefillWeaponAmmo()
+{
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->ResetAmmoToFull();
+	}
+}
+
 void ARupturePlayerCharacter::Revive()
 {
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->StopFire();
+	}
+
 	if (HealthComponent)
 	{
 		HealthComponent->ResetHealth();
 	}
+
+	RefillWeaponAmmo();
+
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	
-	// Desliga ragdoll
 	GetMesh()->SetSimulatePhysics(false);
 	GetMesh()->SetCollisionProfileName(TEXT("CharacterMesh"));
 	GetMesh()->AttachToComponent(
 		GetCapsuleComponent(),
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale
 	);
-	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f)); // ajuste se seu mesh usa outro offset
-	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));   // típico mannequin
+	GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
+	GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+
 	if (UCharacterMovementComponent* MoveComp = GetCharacterMovement())
 	{
 		MoveComp->SetMovementMode(MOVE_Walking);
 	}
+
 	if (APlayerController* PC = Cast<APlayerController>(GetController()))
 	{
 		EnableInput(PC);
 	}
+
 	UE_LOG(LogTemp, Warning, TEXT("Player: Revive() concluído."));
 }

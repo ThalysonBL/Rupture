@@ -23,6 +23,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon Properties")
 	void Reload();
 
+	/** Restaura magazine e reserva ao máximo (novo round / revive). */
+	UFUNCTION(BlueprintCallable, Category = "Ammo")
+	void ResetAmmoToFull();
+
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnAmmoChangedSignature OnAmmoChanged;
 	
@@ -37,6 +41,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	//SKELETAL MESH COMPONENT
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
