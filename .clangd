@@ -1,0 +1,26 @@
+CompileFlags:
+  CompilationDatabase: .
+  Add:
+    - /std:c++20
+    - -ferror-limit=0
+    - -Wno-everything
+  Remove:
+    - -std=c++14
+Diagnostics:
+  UnusedIncludes: None
+  MissingIncludes: None
+Index:
+  Background: Build
+
+---
+# Engine install trees only (not a game living under "Epic Games/...").
+# PathMatch requires Epic Games/UE_X.Y or UE_X.Y or Engine/Source — never bare "Epic Games".
+If:
+  PathMatch: '.*([/\\]Epic Games[/\\]UE_\d+\.\d+[/\\]|[/\\]UE_\d+\.\d+[/\\]|[/\\]Engine[/\\]Source[/\\]).*'
+Index:
+  Background: Skip
+Diagnostics:
+  UnusedIncludes: None
+  MissingIncludes: None
+  Suppress:
+    - "*"

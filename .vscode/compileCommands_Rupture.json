@@ -1,0 +1,106 @@
+[
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\EnemyHealthBarComponent.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\EnemySpawnPortal.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\HealthComponent.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\Rupture.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RuptureBaseCharacter.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RuptureEnemyBase.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RuptureEnemyhealthWidget.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RuptureHUD.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RupturePlayerCharacter.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RupturePlayerHUDWidget.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RuptureTargetDummy.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RuptureWaveManager.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\thaly\\Documents\\Rupture\\Source\\Rupture\\RuptureWeaponBase.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\18\\Insiders\\VC\\Tools\\MSVC\\14.50.35717\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\thaly\\Documents\\Rupture\\.vscode\\compileCommands_Rupture\\Rupture.0.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Source"
+	}
+]

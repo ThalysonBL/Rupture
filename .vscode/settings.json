@@ -1,0 +1,88 @@
+{
+    "clangd.enable": true,
+    "clangd.arguments": [
+        "--background-index",
+        "--header-insertion=never",
+        "--completion-style=detailed",
+        "--query-driver=C:/Program Files*/Microsoft Visual Studio/**/cl.exe,C:/Program Files (x86)/Microsoft Visual Studio/**/cl.exe"
+    ],
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "C_Cpp.autocomplete": "disabled",
+    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.formatting": "disabled",
+    "files.associations": {
+        "*.h": "cpp",
+        "*.cpp": "cpp",
+        "*.hpp": "cpp",
+        "*.inl": "cpp",
+        "*.c": "c",
+        "*.cc": "cpp",
+        "*.cxx": "cpp"
+    },
+    "dotnet.backgroundAnalysis.compilerDiagnosticsScope": "openFiles",
+    "dotnet.backgroundAnalysis.analyzerDiagnosticsScope": "openFiles",
+    "omnisharp.projectLoadTimeout": 120,
+    "omnisharp.enableRoslynAnalyzers": false,
+    "omnisharp.enableEditorConfigSupport": false,
+    "dotnet.dotnetPath": "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/ThirdParty/DotNet/10.0/win-x64",
+    "dotnet.defaultSolution": ".vscode/Rupture.BuildRules.IntelliSense.sln",
+    "ue-vscode-helper.enginePath": "C:\\Program Files\\Epic Games\\UE_5.8",
+    "ue-vscode-helper.preferHost": "cursor",
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\ThirdParty\\DotNet\\10.0\\win-x64;${env:PATH}",
+        "DOTNET_ROOT": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\ThirdParty\\DotNet\\10.0\\win-x64",
+        "DOTNET_HOST_PATH": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\ThirdParty\\DotNet\\10.0\\win-x64\\dotnet.exe",
+        "DOTNET_MULTILEVEL_LOOKUP": "0",
+        "DOTNET_ROLL_FORWARD": "LatestMajor"
+    },
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/node_modules/**": true,
+        "**/Binaries/**": true,
+        "**/DerivedDataCache/**": true,
+        "**/Intermediate/**": true,
+        "**/Saved/**": true,
+        "**/Build/**": true,
+        "**/.cache/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Content/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/DerivedDataCache/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Intermediate/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Saved/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Plugins/**/Binaries/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Plugins/**/Intermediate/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/FeaturePacks/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Templates/**": true
+    },
+    "files.exclude": {
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Content": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/DerivedDataCache": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Intermediate": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Saved": true,
+        "C:/Program Files/Epic Games/UE_5.8/FeaturePacks": true,
+        "C:/Program Files/Epic Games/UE_5.8/Templates": true
+    },
+    "C_Cpp.files.exclude": {
+        "**/Binaries/**": true,
+        "**/DerivedDataCache/**": true,
+        "**/Saved/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Content/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/DerivedDataCache/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Intermediate/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Saved/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Shaders/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/FeaturePacks/**": true,
+        "C:/Program Files/Epic Games/UE_5.8/Templates/**": true
+    },
+    "search.exclude": {
+        "**/Binaries": true,
+        "**/DerivedDataCache": true,
+        "**/Intermediate": true,
+        "**/Saved": true,
+        "C:/Program Files/Epic Games/UE_5.8/Engine/Content": true,
+        "C:/Program Files/Epic Games/UE_5.8/FeaturePacks": true,
+        "C:/Program Files/Epic Games/UE_5.8/Templates": true
+    }
+}
