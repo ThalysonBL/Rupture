@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
+#include "AIController.h"
 
 // Sets default values
 ARuptureWeaponBase::ARuptureWeaponBase()
@@ -11,7 +12,7 @@ ARuptureWeaponBase::ARuptureWeaponBase()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
-	WeaponMesh->SetupAttachment(RootComponent);
+	SetRootComponent(WeaponMesh);
 
 	LastFireTime = 0.0f;
 }
@@ -60,24 +61,33 @@ void ARuptureWeaponBase::Fire()
 
 	LastFireTime = CurrentTime;
 
-	// Extrai quem é o dono da arma e busca a câmera direto do cérebro (Controller) dele
 	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-	if (!OwnerPawn || !OwnerPawn->GetController()) return;
+	if (!OwnerPawn || !OwnerPawn->GetController())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Weapon[%s]: Fire abortado — sem Owner/Controller."), *GetName());
+		return;
+	}
 
 	FVector CameraLocation;
 	FRotator CameraRotation;
-
 	OwnerPawn->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
-	//FVector CameraForward = CameraRotation.Vector();
-
-	//FVector EndLocation = CameraLocation + (CameraForward * MaxRange);
+	// IA: mira no foco (player). Sem isso o GetPlayerViewPoint da AI costuma apontar errado.
+	if (!OwnerPawn->GetController()->IsPlayerController())
+	{
+		if (AAIController* AIController = Cast<AAIController>(OwnerPawn->GetController()))
+		{
+			if (AActor* FocusActor = AIController->GetFocusActor())
+			{
+				CameraLocation = OwnerPawn->GetActorLocation() + FVector(0.f, 0.f, 60.f);
+				CameraRotation = (FocusActor->GetActorLocation() + FVector(0.f, 0.f, 50.f) - CameraLocation).Rotation();
+			}
+		}
+	}
 
 	FVector CameraForward = CameraRotation.Vector();
 
-	// 1. Configura a dispersão (Spread) com base em quem está segurando a arma
 	float SpreadInDegrees = 0.0f;
-
 	if (OwnerPawn->GetController()->IsPlayerController())
 	{
 		SpreadInDegrees = 0.5f;
