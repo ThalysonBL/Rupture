@@ -1,7 +1,10 @@
 #include "RuptureEnemyBase.h"
+
+#include "EnemyHealthBarComponent.h"
 #include "HealthComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EnemyHealthBarComponent.h"
 
 void ARuptureEnemyBase::BeginPlay()
 {
@@ -41,6 +44,8 @@ ARuptureEnemyBase::ARuptureEnemyBase()
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.f, 150.f, 0.f);
 	}
+	
+	HealthBarComponent = CreateDefaultSubobject<UEnemyHealthBarComponent>(TEXT("HealthBarComponent"));	
 }
 
 void ARuptureEnemyBase::HandleDeath()

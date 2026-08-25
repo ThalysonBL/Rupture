@@ -29,7 +29,7 @@ void UHealthComponent::HandleTakeAnyDamage(AActor* DamagedActor, float Damage, c
 	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaxHealth);
 
 	// Dispara o evento para atualizar a interface imediatamente.
-	OnHealthChanged.Broadcast(CurrentHealth);
+	OnHealthChanged.Broadcast(CurrentHealth, MaxHealth);
 
 	// Valida a condição de morte.
 	if (CurrentHealth <= 0.0f)

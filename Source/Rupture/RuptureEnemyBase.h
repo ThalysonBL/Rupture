@@ -8,6 +8,7 @@
 #include "RuptureEnemyBase.generated.h"
 
 class UHealthComponent;
+class UEnemyHealthBarComponent;
 
 UCLASS()
 class RUPTURE_API ARuptureEnemyBase : public ARuptureBaseCharacter
@@ -26,6 +27,10 @@ protected:
 
 	UFUNCTION()
 	void HandleDeath();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	UEnemyHealthBarComponent* HealthBarComponent;
+	
 	
 public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")

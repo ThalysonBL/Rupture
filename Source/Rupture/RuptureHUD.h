@@ -15,7 +15,7 @@ public:
 	UFUNCTION()
 	void OnWeaponEquippedCallback(class ARuptureWeaponBase* NewWeapon);
 
-	// Callback que escuta os tiros e reloads (OBRIGATÓRIO ter UFUNCTION)
+	// Callback listen shooters and reload
 	UFUNCTION()
 	void OnAmmoChangedCallback(int32 CurrentAmmo, int32 ReserveAmmo);
 	
@@ -28,7 +28,7 @@ protected:
 	UPROPERTY()
 	class URupturePlayerHUDWidget* PlayerHUDWidget;
 
-	// Callback do evento de vida (Obrigatório UFUNCTION)
+	// Event Callback the life
 	UFUNCTION()
-	void OnPlayerHealthChanged(float NewHealth);
+	void OnPlayerHealthChanged(float NewHealth, float MaxHealth);
 };

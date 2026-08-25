@@ -38,11 +38,11 @@ void ARuptureHUD::BeginPlay()
 	}
 }
 
-void ARuptureHUD::OnPlayerHealthChanged(float NewHealth)
+void ARuptureHUD::OnPlayerHealthChanged(float NewHealth, float MaxHealth)
 {
 	if (PlayerHUDWidget)
 	{
-		PlayerHUDWidget->UpdateHealth(NewHealth, 100.f); 
+		PlayerHUDWidget->UpdateHealth(NewHealth, MaxHealth); 
 	}
 }
 
