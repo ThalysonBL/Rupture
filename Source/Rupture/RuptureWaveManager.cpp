@@ -207,12 +207,15 @@ void ARuptureWaveManager::RegisterEnemy(ARuptureEnemyBase* Enemy)
 	{
 		HealthComp->OnDeath.AddDynamic(this, &ARuptureWaveManager::OnEnemyDied);
 	}
+
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("WaveManager: inimigo %s sem HealthComponent."), *Enemy->GetName());
 	}
 
 	AliveEnemies++;
+
+	ActiveEnemies.Add(Enemy);
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: inimigo registrado %s | AliveEnemies=%d"),
 		*Enemy->GetName(), AliveEnemies);
 }
@@ -256,4 +259,41 @@ void ARuptureWaveManager::StartNextRound()
 {
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: StartNextRound -> %d"), CurrentRoundIndex + 1);
 	StartRound(CurrentRoundIndex + 1);
+}
+
+
+
+void ARuptureWaveManager::CancelRoundTimers()
+{
+	GetWorldTimerManager().ClearTimer(StartRoundTimerHandle);
+	GetWorldTimerManager().ClearTimer(NextRoundTimerHandle);
+}
+
+void ARuptureWaveManager::ClearActiveEnemies()
+{
+	for (ARuptureEnemyBase* Enemy : ActiveEnemies)
+	{
+		if (Enemy)
+		{
+			Enemy->Destroy();
+		}
+	}
+	ActiveEnemies.Reset();
+	AliveEnemies = 0;
+
+	UE_LOG(LogTemp, Warning, TEXT("WaveManager: inimigos limpos."));
+
+}
+
+void ARuptureWaveManager::RestartCurrentRound()
+{
+	UE_LOG(LogTemp, Warning, TEXT("WaveManager: RestartCurrentRound (%d)"), CurrentRoundIndex + 1);
+	ClearActiveEnemies();
+	StartRound(CurrentRoundIndex);
+}
+void ARuptureWaveManager::RestartAllRounds()
+{
+	UE_LOG(LogTemp, Warning, TEXT("WaveManager: RestartAllRounds"));
+	ClearActiveEnemies();
+	StartRound(0);
 }

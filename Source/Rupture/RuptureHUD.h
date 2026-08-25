@@ -18,6 +18,12 @@ public:
 	// Callback listen shooters and reload
 	UFUNCTION()
 	void OnAmmoChangedCallback(int32 CurrentAmmo, int32 ReserveAmmo);
+
+	void ShowDeathScreen();
+	void HideDeathScreen();
+
+	UFUNCTION()
+	void OnPlayerDied();
 	
 protected:
 	virtual void BeginPlay() override;
@@ -31,4 +37,10 @@ protected:
 	// Event Callback the life
 	UFUNCTION()
 	void OnPlayerHealthChanged(float NewHealth, float MaxHealth);
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class URuptureDeathScreenWidget> DeathScreenClass;
+
+	UPROPERTY()
+	class URuptureDeathScreenWidget* DeathScreenWidget;
 };
