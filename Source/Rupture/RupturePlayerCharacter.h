@@ -61,12 +61,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ReloadAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* CrouchAction;
+
 	void Move(const struct FInputActionValue& Value);
 	void Look(const struct FInputActionValue& Value);
 
 	void StartFire(const struct FInputActionValue& Value);
 	void StopFire(const struct FInputActionValue& Value);
 	void Reload(const struct FInputActionValue& Value);
+	void StartCrouch(const struct FInputActionValue& Value);
+	void StopCrouch(const struct FInputActionValue& Value);
 
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	TSubclassOf<ARuptureWeaponBase> StartingWeaponClass;

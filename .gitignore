@@ -10,6 +10,11 @@ DerivedDataCache/
 Intermediate/
 Saved
 
+# Map lighting/build data (often >100MB; rebuild in editor)
+*_BuiltData.uasset
+*_BuiltData.uexp
+*_BuiltData.ubulk
+
 # User-specific files
 *.rsuser
 *.suo
