@@ -17,10 +17,21 @@ void URupturePlayerHUDWidget::UpdateHealth(float CurrentHealth, float MaxHealth)
 
 void URupturePlayerHUDWidget::UpdateAmmo(int32 CurrentAmmo, int32 ReserveAmmo)
 {
-	// Verifica se os textos não são nulos antes de alterar
 	if (txt_CurrentAmmo && txt_ReserveAmmo)
 	{
 		txt_CurrentAmmo->SetText(FText::AsNumber(CurrentAmmo));
 		txt_ReserveAmmo->SetText(FText::AsNumber(ReserveAmmo));
 	}
+}
+
+void URupturePlayerHUDWidget::UpdateRound(int32 RoundNumber, int32 TotalRounds)
+{
+	if (!txt_Round)
+	{
+		return;
+	}
+
+	txt_Round->SetText(
+		FText::FromString(FString::Printf(TEXT("Round %d/%d"), RoundNumber, TotalRounds))
+	);
 }

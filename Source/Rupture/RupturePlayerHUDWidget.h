@@ -23,10 +23,13 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	UTextBlock* txt_ReserveAmmo;
+
+	/** Exibe o round atual (ex.: "Round 3/10"). Opcional no WBP. */
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidgetOptional))
+	UTextBlock* txt_Round;
     
-    // call function in Observer
-    void UpdateHealth(float CurrentHealth, float MaxHealth);
+	void UpdateHealth(float CurrentHealth, float MaxHealth);
 	
 	void UpdateAmmo(int32 CurrentAmmo, int32 ReserveAmmo);
-	
-};
+
+	void UpdateRound(int32 RoundNumber, int32 TotalRounds = 10);

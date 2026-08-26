@@ -59,13 +59,29 @@ void ARuptureHUD::BindWaveManagerEvents()
 	{
 		if (ARuptureWaveManager* WM = Cast<ARuptureWaveManager>(Found[0]))
 		{
+			WM->OnRoundStarted.AddDynamic(this, &ARuptureHUD::OnRoundStarted);
 			WM->OnAllRoundsCompleted.AddDynamic(this, &ARuptureHUD::OnAllRoundsCompleted);
-			UE_LOG(LogTemp, Warning, TEXT("HUD: inscrito em OnAllRoundsCompleted."));
+			UE_LOG(LogTemp, Warning, TEXT("HUD: inscrito em OnRoundStarted e OnAllRoundsCompleted."));
+
+			// Se o round já começou (ex.: restart), sincroniza o texto
+			if (PlayerHUDWidget)
+			{
+				PlayerHUDWidget->UpdateRound(WM->GetCurrentRoundNumber());
+			}
 		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("HUD: WaveManager não encontrado no BeginPlay."));
+	}
+}
+
+void ARuptureHUD::OnRoundStarted(int32 RoundNumber)
+{
+	UE_LOG(LogTemp, Warning, TEXT("HUD: Round %d iniciado."), RoundNumber);
+	if (PlayerHUDWidget)
+	{
+		PlayerHUDWidget->UpdateRound(RoundNumber);
 	}
 }
 

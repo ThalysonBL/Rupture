@@ -27,6 +27,9 @@ public:
 
 	UFUNCTION()
 	void OnAllRoundsCompleted();
+
+	UFUNCTION()
+	void OnRoundStarted(int32 RoundNumber);
 	
 protected:
 	virtual void BeginPlay() override;
