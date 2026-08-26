@@ -61,10 +61,26 @@ void ARupturePlayerCharacter::BeginPlay()
 
     if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
     {
+		// Após vir do menu (UIOnly), força input de jogo de novo
+		PlayerController->bShowMouseCursor = false;
+		PlayerController->SetIgnoreLookInput(false);
+		PlayerController->SetIgnoreMoveInput(false);
+		PlayerController->EnableInput(PlayerController);
+		PlayerController->SetInputMode(FInputModeGameOnly());
+
         if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
         {
-            Subsystem->AddMappingContext(InputMappingContext, 0);
+			if (InputMappingContext)
+			{
+				Subsystem->AddMappingContext(InputMappingContext, 0);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Error, TEXT("Player: InputMappingContext está None no BP."));
+			}
         }
+
+		UE_LOG(LogTemp, Warning, TEXT("Player: input mode GameOnly aplicado."));
     }
 }
 

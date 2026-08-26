@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,15 +13,20 @@ public:
 	UFUNCTION()
 	void OnWeaponEquippedCallback(class ARuptureWeaponBase* NewWeapon);
 
-	// Callback listen shooters and reload
 	UFUNCTION()
 	void OnAmmoChangedCallback(int32 CurrentAmmo, int32 ReserveAmmo);
 
 	void ShowDeathScreen();
 	void HideDeathScreen();
 
+	void ShowVictoryScreen();
+	void HideVictoryScreen();
+
 	UFUNCTION()
 	void OnPlayerDied();
+
+	UFUNCTION()
+	void OnAllRoundsCompleted();
 	
 protected:
 	virtual void BeginPlay() override;
@@ -34,7 +37,6 @@ protected:
 	UPROPERTY()
 	class URupturePlayerHUDWidget* PlayerHUDWidget;
 
-	// Event Callback the life
 	UFUNCTION()
 	void OnPlayerHealthChanged(float NewHealth, float MaxHealth);
 
@@ -43,4 +45,12 @@ protected:
 
 	UPROPERTY()
 	class URuptureDeathScreenWidget* DeathScreenWidget;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class URuptureVictoryScreenWidget> VictoryScreenClass;
+
+	UPROPERTY()
+	class URuptureVictoryScreenWidget* VictoryScreenWidget;
+
+	void BindWaveManagerEvents();
 };
