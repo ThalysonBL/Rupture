@@ -31,7 +31,6 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 	virtual void Die() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
@@ -78,7 +77,4 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	ARuptureWeaponBase* CurrentWeapon;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Animation")
-	float AimPitch;
 };
