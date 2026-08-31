@@ -48,11 +48,9 @@ void URuptureAnimInstance::UpdateAimPitch(const APawn* Pawn, const float DeltaSe
 		return;
 	}
 
+	// UE: olhar para cima = pitch negativo; para baixo = positivo.
+	// AOBS (CU em -60, CD em +60) usa o mesmo sinal — sem inversão.
 	float TargetPitch = FRotator::NormalizeAxis(Controller->GetControlRotation().Pitch);
-	if (bInvertAimPitch)
-	{
-		TargetPitch *= -1.f;
-	}
 
 	TargetPitch *= AimPitchMultiplier;
 	TargetPitch = FMath::Clamp(TargetPitch, AimPitchMin, AimPitchMax);

@@ -90,10 +90,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Locomotion|Aim", meta = (ClampMin = "0.0", ClampMax = "2.0"))
 	float AimPitchMultiplier = 1.f;
 
-	/** Inverte o pitch. Ative se CU estiver no topo (+) do AOBS; desative se CU estiver embaixo (-). */
-	UPROPERTY(EditDefaultsOnly, Category = "Locomotion|Aim")
-	bool bInvertAimPitch = true;
-
 	/** Suavização do pitch (0 = instantâneo). */
 	UPROPERTY(EditDefaultsOnly, Category = "Locomotion|Aim", meta = (ClampMin = "0.0"))
 	float AimPitchInterpSpeed = 12.f;
