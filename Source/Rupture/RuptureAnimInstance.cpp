@@ -111,6 +111,19 @@ void URuptureAnimInstance::UpdateFloorNormal(const APawn* Pawn)
 		return;
 	}
 
+	// Parado: assume chão plano sem gastar line trace.
+	if (Speed < StrideScaleIdleSpeedThreshold)
+	{
+		FloorNormal = FVector::UpVector;
+		return;
+	}
+
+	++FloorTraceFrameCounter;
+	if (FloorTraceFrameCounter % FloorTraceIntervalFrames != 0)
+	{
+		return;
+	}
+
 	const UWorld* World = Pawn->GetWorld();
 	if (!World)
 	{

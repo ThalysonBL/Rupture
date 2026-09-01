@@ -79,6 +79,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation Warping|Floor", meta = (ClampMin = "10.0"))
 	float FloorTraceDistance = 100.f;
 
+	/** Intervalo em frames entre line traces de chão (reduz custo de CPU). */
+	UPROPERTY(EditDefaultsOnly, Category = "Animation Warping|Floor", meta = (ClampMin = "1"))
+	int32 FloorTraceIntervalFrames = 3;
+
 	/** Limites do pitch enviados ao Aim Offset (devem bater com o range do AOBS). */
 	UPROPERTY(EditDefaultsOnly, Category = "Locomotion|Aim")
 	float AimPitchMin = -60.f;
@@ -101,4 +105,5 @@ private:
 	void UpdateAimPitch(const class APawn* Pawn, float DeltaSeconds);
 
 	float SmoothedAimPitch = 0.f;
+	int32 FloorTraceFrameCounter = 0;
 };

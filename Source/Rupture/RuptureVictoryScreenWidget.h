@@ -34,8 +34,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Victory")
 	float AutoReturnDelay = 4.0f;
 
+	/** Mapa carregado após vitória (padrão: mesmo mapa de rounds). */
 	UPROPERTY(EditDefaultsOnly, Category = "Victory")
-	FName MainMenuLevelName = TEXT("L_MainMenu");
+	FName ReturnLevelName = TEXT("L_Raids");
 
 private:
 	void ReturnToMainMenu();

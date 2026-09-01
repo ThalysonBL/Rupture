@@ -2,6 +2,7 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
+#include "RuptureGameInstance.h"
 #include "TimerManager.h"
 
 void URuptureVictoryScreenWidget::NativeConstruct()
@@ -53,6 +54,16 @@ void URuptureVictoryScreenWidget::OnBackToMenuClicked()
 
 void URuptureVictoryScreenWidget::ReturnToMainMenu()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Victory: voltando ao menu -> %s"), *MainMenuLevelName.ToString());
-	UGameplayStatics::OpenLevel(this, MainMenuLevelName);
+	UE_LOG(LogTemp, Warning, TEXT("Victory: reiniciando -> %s"), *ReturnLevelName.ToString());
+
+	if (URuptureGameInstance* GameInstance = Cast<URuptureGameInstance>(GetGameInstance()))
+	{
+		GameInstance->OpenLevelWithLoadingScreen(
+			ReturnLevelName,
+			FText::FromString(TEXT("Reiniciando..."))
+		);
+		return;
+	}
+
+	UGameplayStatics::OpenLevel(this, ReturnLevelName);
 }

@@ -50,4 +50,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	class UBehaviorTree* EnemyBehaviorTree;
+
+	/** Tempo até o corpo ragdoll ser removido (libera memória/física). */
+	UPROPERTY(EditDefaultsOnly, Category = "Performance", meta = (ClampMin = "1.0"))
+	float CorpseLifespanSeconds = 8.f;
 };

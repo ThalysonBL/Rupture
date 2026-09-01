@@ -1,6 +1,7 @@
 #include "RuptureMainMenuWidget.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "RuptureGameInstance.h"
 
 void URuptureMainMenuWidget::NativeConstruct()
 {
@@ -19,5 +20,15 @@ void URuptureMainMenuWidget::NativeConstruct()
 void URuptureMainMenuWidget::OnStartGameClicked()
 {
 	UE_LOG(LogTemp, Warning, TEXT("MainMenu: Iniciar jogo -> %s"), *GameLevelName.ToString());
+
+	if (URuptureGameInstance* GameInstance = Cast<URuptureGameInstance>(GetGameInstance()))
+	{
+		GameInstance->OpenLevelWithLoadingScreen(
+			GameLevelName,
+			FText::FromString(TEXT("Carregando missão..."))
+		);
+		return;
+	}
+
 	UGameplayStatics::OpenLevel(this, GameLevelName);
 }

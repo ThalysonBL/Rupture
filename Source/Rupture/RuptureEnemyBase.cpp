@@ -92,6 +92,8 @@ void ARuptureEnemyBase::HandleDeath()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetSimulatePhysics(true);
 
+	SetLifeSpan(CorpseLifespanSeconds);
+
 	DetachFromControllerPendingDestroy();
 }
 
