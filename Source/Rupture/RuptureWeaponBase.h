@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "RuptureWeaponBase.generated.h"
 
+class ARuptureProjectile;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChangedSignature, int32, CurrentAmmo, int32, ReserveAmmo);
 
 UCLASS()
@@ -79,6 +81,18 @@ protected:
 	int32 ReserveAmmo;
 
 	bool CanFire() const;
+	bool TryGetAimDirection(const APawn* OwnerPawn, FVector& OutAimDirection) const;
+	FVector GetMuzzleWorldLocation() const;
+	void SpawnProjectile(APawn* OwnerPawn, const FVector& AimDirection);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties|Projectile")
+	TSubclassOf<ARuptureProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties|Projectile")
+	float ProjectileSpeed = 7500.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties|Projectile")
+	float MuzzleSpawnOffset = 18.f;
 
 	//FX
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties")

@@ -1,4 +1,4 @@
-#include "RuptureDeathScreenWidget.h"
+﻿#include "RuptureDeathScreenWidget.h"
 
 #include "Components/Button.h"
 #include "Components/CanvasPanel.h"
@@ -40,8 +40,6 @@ namespace RuptureDeathScreenUI
 		Slot->SetPadding(FMargin(0.f));
 	}
 }
-
-using namespace RuptureDeathScreenUI;
 
 URuptureDeathScreenWidget::URuptureDeathScreenWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -92,8 +90,8 @@ void URuptureDeathScreenWidget::BuildCinematicLayout()
 		}
 	}
 
-	UImage* Dim = CreateSolidImage(TEXT("img_DeathDim"), ColorDim);
-	FillOverlay(Host->AddChildToOverlay(Dim));
+	UImage* Dim = CreateSolidImage(TEXT("img_DeathDim"), RuptureDeathScreenUI::ColorDim);
+	RuptureDeathScreenUI::FillOverlay(Host->AddChildToOverlay(Dim));
 
 	UVerticalBox* Content = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass(), TEXT("vb_DeathContent"));
 	UOverlaySlot* ContentSlot = Host->AddChildToOverlay(Content);
@@ -101,7 +99,7 @@ void URuptureDeathScreenWidget::BuildCinematicLayout()
 	ContentSlot->SetVerticalAlignment(VAlign_Center);
 	ContentSlot->SetPadding(FMargin(48.f));
 
-	UImage* AccentBar = CreateSolidImage(TEXT("img_DeathAccent"), ColorAccent);
+	UImage* AccentBar = CreateSolidImage(TEXT("img_DeathAccent"), RuptureDeathScreenUI::ColorAccent);
 	USizeBox* AccentBox = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass(), TEXT("sb_DeathAccent"));
 	AccentBox->SetWidthOverride(56.f);
 	AccentBox->SetHeightOverride(3.f);
@@ -116,7 +114,7 @@ void URuptureDeathScreenWidget::BuildCinematicLayout()
 	{
 		txt_Title->RemoveFromParent();
 		txt_Title->SetText(FText::FromString(TEXT("VOCÊ MORREU")));
-		StyleLabel(txt_Title, 56, true, ColorTitle, 10);
+		StyleLabel(txt_Title, 56, true, RuptureDeathScreenUI::ColorTitle, 10);
 		if (UVerticalBoxSlot* TitleSlot = Content->AddChildToVerticalBox(txt_Title))
 		{
 			TitleSlot->SetPadding(FMargin(0.f, 0.f, 0.f, 10.f));
@@ -127,7 +125,7 @@ void URuptureDeathScreenWidget::BuildCinematicLayout()
 	if (txt_RoundInfo)
 	{
 		txt_RoundInfo->RemoveFromParent();
-		StyleLabel(txt_RoundInfo, 16, false, ColorMuted, 2);
+		StyleLabel(txt_RoundInfo, 16, false, RuptureDeathScreenUI::ColorMuted, 2);
 		if (UVerticalBoxSlot* InfoSlot = Content->AddChildToVerticalBox(txt_RoundInfo))
 		{
 			InfoSlot->SetPadding(FMargin(0.f, 0.f, 0.f, 36.f));
@@ -138,7 +136,7 @@ void URuptureDeathScreenWidget::BuildCinematicLayout()
 	auto AddAccentRow = [this, Content](UButton* Button, UImage*& AccentOut, const FName& AccentName)
 	{
 		UHorizontalBox* Row = WidgetTree->ConstructWidget<UHorizontalBox>(UHorizontalBox::StaticClass());
-		AccentOut = CreateSolidImage(AccentName, FLinearColor(ColorAccent.R, ColorAccent.G, ColorAccent.B, 0.35f));
+		AccentOut = CreateSolidImage(AccentName, FLinearColor(RuptureDeathScreenUI::ColorAccent.R, RuptureDeathScreenUI::ColorAccent.G, RuptureDeathScreenUI::ColorAccent.B, 0.35f));
 
 		USizeBox* AccentSize = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass());
 		AccentSize->SetWidthOverride(3.f);
@@ -229,10 +227,10 @@ void URuptureDeathScreenWidget::ApplyGhostButtonStyle(UButton* Button, UTextBloc
 	Normal.SetResourceObject(White);
 
 	FSlateBrush Hovered = Normal;
-	Hovered.TintColor = FSlateColor(ColorGhostHover);
+	Hovered.TintColor = FSlateColor(RuptureDeathScreenUI::ColorGhostHover);
 
 	FSlateBrush Pressed = Normal;
-	Pressed.TintColor = FSlateColor(ColorGhostPress);
+	Pressed.TintColor = FSlateColor(RuptureDeathScreenUI::ColorGhostPress);
 
 	Style.SetNormal(Normal);
 	Style.SetHovered(Hovered);
@@ -245,7 +243,7 @@ void URuptureDeathScreenWidget::ApplyGhostButtonStyle(UButton* Button, UTextBloc
 
 	if (Label)
 	{
-		StyleLabel(Label, bPrimary ? 18 : 16, bPrimary, ColorTitle, 4);
+		StyleLabel(Label, bPrimary ? 18 : 16, bPrimary, RuptureDeathScreenUI::ColorTitle, 4);
 	}
 }
 
@@ -257,7 +255,7 @@ void URuptureDeathScreenWidget::SetAccentVisible(UImage* Accent, bool bHovered) 
 	}
 
 	const float Alpha = bHovered ? 1.f : 0.35f;
-	Accent->SetColorAndOpacity(FLinearColor(ColorAccent.R, ColorAccent.G, ColorAccent.B, Alpha));
+	Accent->SetColorAndOpacity(FLinearColor(RuptureDeathScreenUI::ColorAccent.R, RuptureDeathScreenUI::ColorAccent.G, RuptureDeathScreenUI::ColorAccent.B, Alpha));
 }
 
 void URuptureDeathScreenWidget::StyleLabel(

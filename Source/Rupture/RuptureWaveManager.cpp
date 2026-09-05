@@ -2,6 +2,7 @@
 #include "EnemySpawnPortal.h"
 #include "RuptureEnemyBase.h"
 #include "RupturePlayerCharacter.h"
+#include "RuptureProjectile.h"
 #include "RuptureWeaponBase.h"
 #include "HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -124,6 +125,16 @@ void ARuptureWaveManager::CollectOrphanWeapons()
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("WaveManager: armas órfãs destruídas = %d"), DestroyedCount);
+
+	TArray<AActor*> FoundProjectiles;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARuptureProjectile::StaticClass(), FoundProjectiles);
+	for (AActor* Actor : FoundProjectiles)
+	{
+		if (IsValid(Actor))
+		{
+			Actor->Destroy();
+		}
+	}
 }
 
 void ARuptureWaveManager::RefillPlayerAmmo()

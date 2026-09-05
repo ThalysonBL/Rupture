@@ -1,4 +1,4 @@
-#include "RuptureMainMenuWidget.h"
+﻿#include "RuptureMainMenuWidget.h"
 
 #include "RuptureGameInstance.h"
 #include "Components/Button.h"
@@ -41,8 +41,6 @@ namespace RuptureMainMenuUI
 		Slot->SetPadding(FMargin(0.f));
 	}
 }
-
-using namespace RuptureMainMenuUI;
 
 URuptureMainMenuWidget::URuptureMainMenuWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -104,12 +102,12 @@ void URuptureMainMenuWidget::BuildCinematicLayout()
 		return;
 	}
 
-	UImage* FullDim = CreateSolidImage(TEXT("img_FullDim"), ColorDimFull);
-	FillOverlay(Host->AddChildToOverlay(FullDim));
+	UImage* FullDim = CreateSolidImage(TEXT("img_FullDim"), RuptureMainMenuUI::ColorDimFull);
+	RuptureMainMenuUI::FillOverlay(Host->AddChildToOverlay(FullDim));
 	FullDim->SetVisibility(ESlateVisibility::HitTestInvisible);
 
 	UHorizontalBox* Columns = WidgetTree->ConstructWidget<UHorizontalBox>(UHorizontalBox::StaticClass(), TEXT("hb_Columns"));
-	FillOverlay(Host->AddChildToOverlay(Columns));
+	RuptureMainMenuUI::FillOverlay(Host->AddChildToOverlay(Columns));
 	Columns->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 
 	UOverlay* LeftOverlay = WidgetTree->ConstructWidget<UOverlay>(UOverlay::StaticClass(), TEXT("ov_LeftPanel"));
@@ -120,8 +118,8 @@ void URuptureMainMenuWidget::BuildCinematicLayout()
 	LeftSlot->SetVerticalAlignment(VAlign_Fill);
 	LeftSlot->SetHorizontalAlignment(HAlign_Fill);
 
-	UImage* LeftDim = CreateSolidImage(TEXT("img_LeftDim"), ColorDimLeft);
-	FillOverlay(LeftOverlay->AddChildToOverlay(LeftDim));
+	UImage* LeftDim = CreateSolidImage(TEXT("img_LeftDim"), RuptureMainMenuUI::ColorDimLeft);
+	RuptureMainMenuUI::FillOverlay(LeftOverlay->AddChildToOverlay(LeftDim));
 	LeftDim->SetVisibility(ESlateVisibility::HitTestInvisible);
 
 	USizeBox* ContentBox = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass(), TEXT("sb_Content"));
@@ -133,7 +131,7 @@ void URuptureMainMenuWidget::BuildCinematicLayout()
 	UVerticalBox* Content = WidgetTree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass(), TEXT("vb_Content"));
 	ContentBox->AddChild(Content);
 
-	UImage* AccentBar = CreateSolidImage(TEXT("img_AccentBar"), ColorAccent);
+	UImage* AccentBar = CreateSolidImage(TEXT("img_AccentBar"), RuptureMainMenuUI::ColorAccent);
 	USizeBox* AccentBox = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass(), TEXT("sb_AccentBar"));
 	AccentBox->SetWidthOverride(56.f);
 	AccentBox->SetHeightOverride(3.f);
@@ -151,7 +149,7 @@ void URuptureMainMenuWidget::BuildCinematicLayout()
 			FText::FromString(TEXT("RUPTURE")),
 			78,
 			true,
-			ColorTitle,
+			RuptureMainMenuUI::ColorTitle,
 			16);
 	}
 	else
@@ -171,7 +169,7 @@ void URuptureMainMenuWidget::BuildCinematicLayout()
 			FText::FromString(TEXT("SOBREVIVA A 10 ROUNDS")),
 			15,
 			false,
-			ColorMuted,
+			RuptureMainMenuUI::ColorMuted,
 			6);
 	}
 	else
@@ -194,7 +192,7 @@ void URuptureMainMenuWidget::BuildCinematicLayout()
 	auto AddAccentRow = [this, ButtonStack](UButton* Button, UImage*& AccentOut, const FName& AccentName)
 	{
 		UHorizontalBox* Row = WidgetTree->ConstructWidget<UHorizontalBox>(UHorizontalBox::StaticClass());
-		AccentOut = CreateSolidImage(AccentName, FLinearColor(ColorAccent.R, ColorAccent.G, ColorAccent.B, 0.35f));
+		AccentOut = CreateSolidImage(AccentName, FLinearColor(RuptureMainMenuUI::ColorAccent.R, RuptureMainMenuUI::ColorAccent.G, RuptureMainMenuUI::ColorAccent.B, 0.35f));
 
 		USizeBox* AccentSize = WidgetTree->ConstructWidget<USizeBox>(USizeBox::StaticClass());
 		AccentSize->SetWidthOverride(3.f);
@@ -305,10 +303,10 @@ void URuptureMainMenuWidget::ApplyGhostButtonStyle(UButton* Button, UTextBlock* 
 	Normal.SetResourceObject(White);
 
 	FSlateBrush Hovered = Normal;
-	Hovered.TintColor = FSlateColor(ColorGhostHover);
+	Hovered.TintColor = FSlateColor(RuptureMainMenuUI::ColorGhostHover);
 
 	FSlateBrush Pressed = Normal;
-	Pressed.TintColor = FSlateColor(ColorGhostPress);
+	Pressed.TintColor = FSlateColor(RuptureMainMenuUI::ColorGhostPress);
 
 	Style.SetNormal(Normal);
 	Style.SetHovered(Hovered);
@@ -325,7 +323,7 @@ void URuptureMainMenuWidget::ApplyGhostButtonStyle(UButton* Button, UTextBlock* 
 		FSlateFontInfo Font = FCoreStyle::GetDefaultFontStyle(bPrimary ? TEXT("Bold") : TEXT("Regular"), Size);
 		Font.LetterSpacing = 4;
 		Label->SetFont(Font);
-		Label->SetColorAndOpacity(FSlateColor(ColorTitle));
+		Label->SetColorAndOpacity(FSlateColor(RuptureMainMenuUI::ColorTitle));
 	}
 }
 
@@ -337,7 +335,7 @@ void URuptureMainMenuWidget::SetAccentVisible(UImage* Accent, bool bHovered) con
 	}
 
 	const float Alpha = bHovered ? 1.f : 0.35f;
-	Accent->SetColorAndOpacity(FLinearColor(ColorAccent.R, ColorAccent.G, ColorAccent.B, Alpha));
+	Accent->SetColorAndOpacity(FLinearColor(RuptureMainMenuUI::ColorAccent.R, RuptureMainMenuUI::ColorAccent.G, RuptureMainMenuUI::ColorAccent.B, Alpha));
 }
 
 UTextBlock* URuptureMainMenuWidget::FindOrCreateButtonLabel(UButton* Button, const FText& DefaultText, const FName& WidgetName)
@@ -353,7 +351,7 @@ UTextBlock* URuptureMainMenuWidget::FindOrCreateButtonLabel(UButton* Button, con
 		return Existing;
 	}
 
-	UTextBlock* Label = CreateLabel(WidgetName, DefaultText, 20, true, ColorTitle, 4);
+	UTextBlock* Label = CreateLabel(WidgetName, DefaultText, 20, true, RuptureMainMenuUI::ColorTitle, 4);
 	Button->AddChild(Label);
 	return Label;
 }
@@ -361,7 +359,7 @@ UTextBlock* URuptureMainMenuWidget::FindOrCreateButtonLabel(UButton* Button, con
 UButton* URuptureMainMenuWidget::CreateGhostButton(const FName& ButtonName, const FText& Label, UTextBlock*& OutLabel)
 {
 	UButton* Button = WidgetTree->ConstructWidget<UButton>(UButton::StaticClass(), ButtonName);
-	OutLabel = CreateLabel(*FString::Printf(TEXT("%s_Label"), *ButtonName.ToString()), Label, 20, true, ColorTitle, 4);
+	OutLabel = CreateLabel(*FString::Printf(TEXT("%s_Label"), *ButtonName.ToString()), Label, 20, true, RuptureMainMenuUI::ColorTitle, 4);
 	Button->AddChild(OutLabel);
 	return Button;
 }

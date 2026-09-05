@@ -1,6 +1,6 @@
 #include "RuptureMainMenuShowcase.h"
 
-#include "Animation/AnimSequence.h"
+#include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -23,7 +23,7 @@ ARuptureMainMenuShowcase::ARuptureMainMenuShowcase()
 	CharacterMesh->SetupAttachment(Root);
 	CharacterMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CharacterMesh->SetCastShadow(true);
-	CharacterMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	CharacterMesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	CharacterMesh->SetRelativeRotation(FRotator(0.f, CharacterYawOffset, 0.f));
 	CharacterMesh->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 	CharacterMesh->PrimaryComponentTick.bCanEverTick = true;
@@ -37,11 +37,12 @@ ARuptureMainMenuShowcase::ARuptureMainMenuShowcase()
 		CharacterMesh->SetSkeletalMesh(MeshFinder.Object);
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimSequence> IdleFinder(
-		TEXT("/Game/QuantumCharacter/Demo/Animations/A_MM_Idle.A_MM_Idle"));
-	if (IdleFinder.Succeeded())
+	static ConstructorHelpers::FClassFinder<UAnimInstance> AnimBPFinder(
+		TEXT("/Game/Anim/Player/ABS_Rupture.ABS_Rupture_C"));
+	if (AnimBPFinder.Succeeded())
 	{
-		IdleAnimation = IdleFinder.Object;
+		CharacterAnimClass = AnimBPFinder.Class;
+		CharacterMesh->SetAnimInstanceClass(CharacterAnimClass);
 	}
 
 	RifleMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("RifleMesh"));
@@ -108,7 +109,7 @@ void ARuptureMainMenuShowcase::BeginPlay()
 	}
 
 	SnapToFloor();
-	PlayIdleAnimation();
+	ApplyCharacterAnimBlueprint();
 	AttachRifleToHand();
 	FrameCinematicCamera();
 
@@ -156,34 +157,34 @@ void ARuptureMainMenuShowcase::SnapToFloor()
 	}
 }
 
-void ARuptureMainMenuShowcase::PlayIdleAnimation()
+void ARuptureMainMenuShowcase::ApplyCharacterAnimBlueprint()
 {
 	if (!CharacterMesh)
 	{
 		return;
 	}
 
-	if (!IdleAnimation)
+	if (!CharacterAnimClass)
 	{
-		IdleAnimation = LoadObject<UAnimSequence>(
+		CharacterAnimClass = LoadClass<UAnimInstance>(
 			nullptr,
-			TEXT("/Game/QuantumCharacter/Demo/Animations/A_MM_Idle.A_MM_Idle"));
+			TEXT("/Game/Anim/Player/ABS_Rupture.ABS_Rupture_C"));
 	}
 
-	CharacterMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	CharacterMesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	CharacterMesh->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
 	CharacterMesh->bPauseAnims = false;
 	CharacterMesh->SetComponentTickEnabled(true);
 
-	if (IdleAnimation)
+	if (CharacterAnimClass)
 	{
-		CharacterMesh->OverrideAnimationData(IdleAnimation, true, true, 0.f, 1.f);
-		CharacterMesh->Play(true);
-		UE_LOG(LogTemp, Log, TEXT("MenuShowcase: idle %s em loop."), *IdleAnimation->GetName());
+		CharacterMesh->SetAnimInstanceClass(CharacterAnimClass);
+		CharacterMesh->InitAnim(true);
+		UE_LOG(LogTemp, Log, TEXT("MenuShowcase: ABP %s aplicado."), *CharacterAnimClass->GetName());
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("MenuShowcase: A_MM_Idle não carregou. Personagem fica em T-pose."));
+		UE_LOG(LogTemp, Error, TEXT("MenuShowcase: ABS_Rupture não carregou. Personagem fica em T-pose."));
 	}
 }
 

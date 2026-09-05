@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "RuptureMainMenuShowcase.generated.h"
 
-class UAnimSequence;
+class UAnimInstance;
 class UCameraComponent;
 class UNiagaraComponent;
 class UPointLightComponent;
@@ -61,12 +61,12 @@ protected:
 
 private:
 	void SnapToFloor();
-	void PlayIdleAnimation();
+	void ApplyCharacterAnimBlueprint();
 	void AttachRifleToHand();
 	void FrameCinematicCamera();
 
 	UPROPERTY()
-	TObjectPtr<UAnimSequence> IdleAnimation;
+	TSubclassOf<UAnimInstance> CharacterAnimClass;
 
 	FVector BaseCameraLocation = FVector::ZeroVector;
 	FRotator BaseCameraRotation = FRotator::ZeroRotator;
