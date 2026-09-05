@@ -7,7 +7,6 @@
 #include "RuptureWeaponBase.generated.h"
 
 class ARuptureProjectile;
-class USkeletalMeshComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAmmoChangedSignature, int32, CurrentAmmo, int32, ReserveAmmo);
 
@@ -40,9 +39,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Ammo")
 	int32 GetReserveAmmo() const;
-
-	/** Ancora a arma no WeaponSocket e corrige o eixo do mesh (KA47 aponta +X). */
-	void AttachToCharacterMesh(USkeletalMeshComponent* CharacterMesh);
 
 protected:
 	// Called when the game starts or when spawned
@@ -97,16 +93,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties|Projectile")
 	float MuzzleSpawnOffset = 18.f;
-
-	/**
-	 * Correção do eixo da KA47 no socket da mão.
-	 * Identity deixa o cano apontando para a direita do personagem.
-	 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties")
-	FRotator SocketAttachRotation = FRotator(0.f, -90.f, 0.f);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties")
-	FVector SocketAttachLocation = FVector::ZeroVector;
 
 	//FX
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Properties")

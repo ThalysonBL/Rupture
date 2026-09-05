@@ -67,7 +67,11 @@ void ARupturePlayerCharacter::BeginPlay() {
         StartingWeaponClass, GetActorLocation(), GetActorRotation(),
         SpawnParams);
     if (CurrentWeapon) {
-      CurrentWeapon->AttachToCharacterMesh(GetMesh());
+      FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget,
+                                                true);
+
+      CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules,
+                                       FName("WeaponSocket"));
       OnWeaponEquipped.Broadcast(CurrentWeapon);
     }
   }

@@ -4,7 +4,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "AIController.h"
-#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "RuptureProjectile.h"
 
@@ -55,30 +54,6 @@ void ARuptureWeaponBase::ResetAmmoToFull()
 	CurrentAmmo = MaxMagazineAmmo;
 	ReserveAmmo = MaxReserveAmmo;
 	OnAmmoChanged.Broadcast(CurrentAmmo, ReserveAmmo);
-}
-
-void ARuptureWeaponBase::AttachToCharacterMesh(USkeletalMeshComponent* CharacterMesh)
-{
-	if (!CharacterMesh)
-	{
-		return;
-	}
-
-	const FName WeaponSocket(TEXT("WeaponSocket"));
-	const FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-
-	if (CharacterMesh->DoesSocketExist(WeaponSocket))
-	{
-		AttachToComponent(CharacterMesh, AttachmentRules, WeaponSocket);
-	}
-	else
-	{
-		AttachToComponent(CharacterMesh, AttachmentRules);
-		UE_LOG(LogTemp, Warning, TEXT("Arma[%s]: WeaponSocket ausente, anexada na origem do mesh."), *GetName());
-	}
-
-	SetActorRelativeRotation(SocketAttachRotation);
-	SetActorRelativeLocation(SocketAttachLocation);
 }
 
 void ARuptureWeaponBase::Fire()
