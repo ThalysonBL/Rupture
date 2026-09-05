@@ -53,6 +53,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Menu|Personagem")
 	float CharacterYawOffset = -150.f;
 
+	/** Correção do eixo da AK no socket (Identity aponta para a direita). */
+	UPROPERTY(EditAnywhere, Category = "Menu|Personagem")
+	FRotator RifleSocketRotation = FRotator(0.f, -90.f, 0.f);
+
 	UPROPERTY(EditAnywhere, Category = "Menu|Câmera")
 	float CameraSwayYawDegrees = 2.2f;
 

@@ -74,8 +74,7 @@ void ARuptureEnemyBase::EnsureWeaponSpawned()
 
 	if (CurrentWeapon)
 	{
-		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-		CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules, FName("WeaponSocket"));
+		CurrentWeapon->AttachToCharacterMesh(GetMesh());
 		UE_LOG(LogTemp, Warning, TEXT("Enemy[%s]: arma spawnada -> %s"), *GetName(), *CurrentWeapon->GetName());
 	}
 	else

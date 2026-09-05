@@ -212,7 +212,8 @@ void ARuptureMainMenuShowcase::AttachRifleToHand()
 			CharacterMesh,
 			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 			WeaponSocket);
-		RifleMesh->SetRelativeTransform(FTransform::Identity);
+		RifleMesh->SetRelativeLocation(FVector::ZeroVector);
+		RifleMesh->SetRelativeRotation(RifleSocketRotation);
 		UE_LOG(LogTemp, Log, TEXT("MenuShowcase: AK anexada ao WeaponSocket."));
 		return;
 	}

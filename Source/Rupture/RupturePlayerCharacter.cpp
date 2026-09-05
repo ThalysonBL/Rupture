@@ -67,15 +67,7 @@ void ARupturePlayerCharacter::BeginPlay() {
         StartingWeaponClass, GetActorLocation(), GetActorRotation(),
         SpawnParams);
     if (CurrentWeapon) {
-      // Regras de Ancoragem: Faça a arma "pular" para a posição e rotação
-      // exatas do Socket
-      FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget,
-                                                true);
-
-      // Gruda a arma no esqueleto (Mesh) do personagem, no socket
-      // "WeaponSocket"
-      CurrentWeapon->AttachToComponent(GetMesh(), AttachmentRules,
-                                       FName("WeaponSocket"));
+      CurrentWeapon->AttachToCharacterMesh(GetMesh());
       OnWeaponEquipped.Broadcast(CurrentWeapon);
     }
   }
