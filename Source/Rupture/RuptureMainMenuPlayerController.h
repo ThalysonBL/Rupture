@@ -9,6 +9,9 @@ class RUPTURE_API ARuptureMainMenuPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	ARuptureMainMenuPlayerController();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -16,5 +19,9 @@ protected:
 	TSubclassOf<class URuptureMainMenuWidget> MainMenuWidgetClass;
 
 	UPROPERTY()
-	class URuptureMainMenuWidget* MainMenuWidget;
+	TObjectPtr<class URuptureMainMenuWidget> MainMenuWidget;
+
+private:
+	void SpawnShowcaseIfNeeded();
+	void PossessCinematicCamera();
 };

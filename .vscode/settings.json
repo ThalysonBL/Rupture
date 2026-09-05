@@ -24,7 +24,6 @@
     "omnisharp.projectLoadTimeout": 120,
     "omnisharp.enableRoslynAnalyzers": false,
     "omnisharp.enableEditorConfigSupport": false,
-    "dotnet.dotnetPath": "C:/Program Files/Epic Games/UE_5.8/Engine/Binaries/ThirdParty/DotNet/10.0/win-x64",
     "dotnet.defaultSolution": ".vscode/Rupture.BuildRules.IntelliSense.sln",
     "ue-vscode-helper.enginePath": "C:\\Program Files\\Epic Games\\UE_5.8",
     "ue-vscode-helper.preferHost": "cursor",
@@ -84,5 +83,11 @@
         "C:/Program Files/Epic Games/UE_5.8/Engine/Content": true,
         "C:/Program Files/Epic Games/UE_5.8/FeaturePacks": true,
         "C:/Program Files/Epic Games/UE_5.8/Templates": true
-    }
+    },
+    "dotnetAcquisitionExtension.existingDotnetPath": [
+        {
+            "extensionId": "ms-dotnettools.csharp",
+            "path": "C:\\Program Files\\Epic Games\\UE_5.8\\Engine\\Binaries\\ThirdParty\\DotNet\\10.0\\win-x64\\dotnet.exe"
+        }
+    ]
 }
