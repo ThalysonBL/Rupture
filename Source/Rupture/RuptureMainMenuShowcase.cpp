@@ -1,12 +1,10 @@
 #include "RuptureMainMenuShowcase.h"
 
+#include "Animation/AnimSequence.h"
 #include "Camera/CameraComponent.h"
 #include "Components/PointLightComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Components/StaticMeshComponent.h"
 #include "Engine/SkeletalMesh.h"
-#include "Engine/StaticMesh.h"
-#include "Animation/AnimSequence.h"
 #include "NiagaraComponent.h"
 #include "NiagaraSystem.h"
 #include "UObject/ConstructorHelpers.h"
@@ -26,7 +24,11 @@ ARuptureMainMenuShowcase::ARuptureMainMenuShowcase()
 	CharacterMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CharacterMesh->SetCastShadow(true);
 	CharacterMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-	CharacterMesh->SetRelativeRotation(FRotator(0.f, 150.f, 0.f));
+	CharacterMesh->SetRelativeRotation(FRotator(0.f, CharacterYawOffset, 0.f));
+	CharacterMesh->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+	CharacterMesh->PrimaryComponentTick.bCanEverTick = true;
+	CharacterMesh->PrimaryComponentTick.bStartWithTickEnabled = true;
+	CharacterMesh->bPauseAnims = false;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshFinder(
 		TEXT("/Game/QuantumCharacter/Mesh/SKM_QuantumCharacter.SKM_QuantumCharacter"));
@@ -39,19 +41,19 @@ ARuptureMainMenuShowcase::ARuptureMainMenuShowcase()
 		TEXT("/Game/QuantumCharacter/Demo/Animations/A_MM_Idle.A_MM_Idle"));
 	if (IdleFinder.Succeeded())
 	{
-		CharacterMesh->SetAnimation(IdleFinder.Object);
+		IdleAnimation = IdleFinder.Object;
 	}
 
-	RifleMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RifleMesh"));
-	RifleMesh->SetupAttachment(CharacterMesh);
+	RifleMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("RifleMesh"));
+	RifleMesh->SetupAttachment(CharacterMesh, TEXT("WeaponSocket"));
 	RifleMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RifleMesh->SetCastShadow(true);
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> RifleFinder(
-		TEXT("/Game/QuantumCharacter/Mesh/Rifle/SM_Rifle_Olive.SM_Rifle_Olive"));
-	if (RifleFinder.Succeeded())
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> AKFinder(
+		TEXT("/Game/FPS_Weapon_Bundle/Weapons/Meshes/Ka47/SK_KA47.SK_KA47"));
+	if (AKFinder.Succeeded())
 	{
-		RifleMesh->SetStaticMesh(RifleFinder.Object);
+		RifleMesh->SetSkeletalMesh(AKFinder.Object);
 	}
 
 	PortalVfx = CreateDefaultSubobject<UNiagaraComponent>(TEXT("PortalVfx"));
@@ -100,14 +102,15 @@ void ARuptureMainMenuShowcase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SnapToFloor();
-	AttachRifleToHand();
-	FrameCinematicCamera();
-
 	if (CharacterMesh)
 	{
-		CharacterMesh->Play(true);
+		CharacterMesh->SetRelativeRotation(FRotator(0.f, CharacterYawOffset, 0.f));
 	}
+
+	SnapToFloor();
+	PlayIdleAnimation();
+	AttachRifleToHand();
+	FrameCinematicCamera();
 
 	if (PortalVfx && !PortalVfx->IsActive())
 	{
@@ -153,6 +156,37 @@ void ARuptureMainMenuShowcase::SnapToFloor()
 	}
 }
 
+void ARuptureMainMenuShowcase::PlayIdleAnimation()
+{
+	if (!CharacterMesh)
+	{
+		return;
+	}
+
+	if (!IdleAnimation)
+	{
+		IdleAnimation = LoadObject<UAnimSequence>(
+			nullptr,
+			TEXT("/Game/QuantumCharacter/Demo/Animations/A_MM_Idle.A_MM_Idle"));
+	}
+
+	CharacterMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	CharacterMesh->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+	CharacterMesh->bPauseAnims = false;
+	CharacterMesh->SetComponentTickEnabled(true);
+
+	if (IdleAnimation)
+	{
+		CharacterMesh->OverrideAnimationData(IdleAnimation, true, true, 0.f, 1.f);
+		CharacterMesh->Play(true);
+		UE_LOG(LogTemp, Log, TEXT("MenuShowcase: idle %s em loop."), *IdleAnimation->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("MenuShowcase: A_MM_Idle não carregou. Personagem fica em T-pose."));
+	}
+}
+
 void ARuptureMainMenuShowcase::AttachRifleToHand()
 {
 	if (!RifleMesh || !CharacterMesh)
@@ -160,31 +194,29 @@ void ARuptureMainMenuShowcase::AttachRifleToHand()
 		return;
 	}
 
-	static const FName CandidateSockets[] = {
-		TEXT("WeaponSocket"),
-		TEXT("weapon_r"),
-		TEXT("hand_r"),
-		TEXT("Hand_R"),
-		TEXT("ik_hand_gun"),
-		TEXT("socket_r_hand")
-	};
-
-	for (const FName SocketName : CandidateSockets)
+	if (!RifleMesh->GetSkeletalMeshAsset())
 	{
-		if (CharacterMesh->DoesSocketExist(SocketName))
+		if (USkeletalMesh* AKMesh = LoadObject<USkeletalMesh>(
+			nullptr,
+			TEXT("/Game/FPS_Weapon_Bundle/Weapons/Meshes/Ka47/SK_KA47.SK_KA47")))
 		{
-			RifleMesh->AttachToComponent(
-				CharacterMesh,
-				FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-				SocketName);
-			UE_LOG(LogTemp, Log, TEXT("MenuShowcase: rifle anexado ao socket %s"), *SocketName.ToString());
-			return;
+			RifleMesh->SetSkeletalMesh(AKMesh);
 		}
 	}
 
-	RifleMesh->SetRelativeLocation(FVector(8.f, 12.f, 108.f));
-	RifleMesh->SetRelativeRotation(FRotator(-12.f, 90.f, 8.f));
-	UE_LOG(LogTemp, Warning, TEXT("MenuShowcase: nenhum socket de arma encontrado; rifle em pose aproximada."));
+	const FName WeaponSocket(TEXT("WeaponSocket"));
+	if (CharacterMesh->DoesSocketExist(WeaponSocket))
+	{
+		RifleMesh->AttachToComponent(
+			CharacterMesh,
+			FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+			WeaponSocket);
+		RifleMesh->SetRelativeTransform(FTransform::Identity);
+		UE_LOG(LogTemp, Log, TEXT("MenuShowcase: AK anexada ao WeaponSocket."));
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("MenuShowcase: WeaponSocket ausente; AK permanece no fallback."));
 }
 
 void ARuptureMainMenuShowcase::FrameCinematicCamera()

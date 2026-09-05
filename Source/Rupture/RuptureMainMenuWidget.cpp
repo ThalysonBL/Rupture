@@ -20,7 +20,7 @@
 #include "Fonts/SlateFontInfo.h"
 #include "Blueprint/WidgetTree.h"
 
-namespace
+namespace RuptureMainMenuUI
 {
 	const FLinearColor ColorTitle(0.97f, 0.95f, 0.91f, 1.f);
 	const FLinearColor ColorMuted(0.72f, 0.69f, 0.64f, 0.9f);
@@ -41,6 +41,8 @@ namespace
 		Slot->SetPadding(FMargin(0.f));
 	}
 }
+
+using namespace RuptureMainMenuUI;
 
 URuptureMainMenuWidget::URuptureMainMenuWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

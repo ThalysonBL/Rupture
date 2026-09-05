@@ -4,11 +4,11 @@
 #include "GameFramework/Actor.h"
 #include "RuptureMainMenuShowcase.generated.h"
 
+class UAnimSequence;
 class UCameraComponent;
 class UNiagaraComponent;
 class UPointLightComponent;
 class USkeletalMeshComponent;
-class UStaticMeshComponent;
 
 /**
  * Cena cinematográfica do menu: personagem, portal, luzes e câmera.
@@ -35,7 +35,7 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> CharacterMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Menu")
-	TObjectPtr<UStaticMeshComponent> RifleMesh;
+	TObjectPtr<USkeletalMeshComponent> RifleMesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Menu")
 	TObjectPtr<UNiagaraComponent> PortalVfx;
@@ -49,6 +49,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Menu")
 	TObjectPtr<UPointLightComponent> RimLight;
 
+	/** Yaw relativo do personagem. Negativo = esquerda na Unreal. */
+	UPROPERTY(EditAnywhere, Category = "Menu|Personagem")
+	float CharacterYawOffset = -150.f;
+
 	UPROPERTY(EditAnywhere, Category = "Menu|Câmera")
 	float CameraSwayYawDegrees = 2.2f;
 
@@ -57,8 +61,12 @@ protected:
 
 private:
 	void SnapToFloor();
+	void PlayIdleAnimation();
 	void AttachRifleToHand();
 	void FrameCinematicCamera();
+
+	UPROPERTY()
+	TObjectPtr<UAnimSequence> IdleAnimation;
 
 	FVector BaseCameraLocation = FVector::ZeroVector;
 	FRotator BaseCameraRotation = FRotator::ZeroRotator;
