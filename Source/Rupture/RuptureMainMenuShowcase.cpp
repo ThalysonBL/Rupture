@@ -26,6 +26,7 @@ ARuptureMainMenuShowcase::ARuptureMainMenuShowcase()
 	CharacterMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	CharacterMesh->SetCastShadow(true);
 	CharacterMesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	CharacterMesh->SetRelativeRotation(FRotator(0.f, 150.f, 0.f));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MeshFinder(
 		TEXT("/Game/QuantumCharacter/Mesh/SKM_QuantumCharacter.SKM_QuantumCharacter"));

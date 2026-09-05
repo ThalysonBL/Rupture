@@ -257,19 +257,6 @@ void URuptureMainMenuWidget::BuildCinematicLayout()
 		RightSlot->SetSize(RightSize);
 	}
 
-	UTextBlock* VersionLabel = CreateLabel(
-		TEXT("txt_Version"),
-		FText::FromString(TEXT("PROTOTIPO  ·  OPERAÇÃO RUPTURE")),
-		11,
-		false,
-		FLinearColor(ColorMuted.R, ColorMuted.G, ColorMuted.B, 0.55f),
-		3);
-	if (UVerticalBoxSlot* VersionSlot = Content->AddChildToVerticalBox(VersionLabel))
-	{
-		VersionSlot->SetPadding(FMargin(0.f, 48.f, 0.f, 0.f));
-		VersionSlot->SetHorizontalAlignment(HAlign_Left);
-	}
-
 	bLayoutReady = true;
 }
 
