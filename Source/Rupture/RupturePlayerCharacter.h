@@ -63,6 +63,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* CrouchAction;
 
+	/** false = aperta uma vez para agachar/desagachar (toggle). true = segura para agachar. */
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	bool bHoldToCrouch = false;
+
 	void Move(const struct FInputActionValue& Value);
 	void Look(const struct FInputActionValue& Value);
 
@@ -77,4 +81,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
 	ARuptureWeaponBase* CurrentWeapon;
+
+	void ConfigureCrouchSettings();
 };

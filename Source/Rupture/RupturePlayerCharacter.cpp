@@ -12,7 +12,6 @@
 
 
 ARupturePlayerCharacter::ARupturePlayerCharacter() {
-  PrimaryActorTick.bCanEverTick = true;
 
   bUseControllerRotationYaw = true;
   bUseControllerRotationPitch = false;
@@ -37,13 +36,27 @@ ARupturePlayerCharacter::ARupturePlayerCharacter() {
   FollowCamera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
   FollowCamera->bUsePawnControlRotation = false;
 
-  GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
-  GetCharacterMovement()->MaxWalkSpeedCrouched = 200.f;
-  GetCharacterMovement()->SetCrouchedHalfHeight(48.f);
+  ConfigureCrouchSettings();
+}
+
+void ARupturePlayerCharacter::ConfigureCrouchSettings() {
+  UCharacterMovementComponent* MoveComp = GetCharacterMovement();
+  if (!MoveComp) {
+    return;
+  }
+
+  // UE 5.8: CanEverCrouch() lê NavAgentProperties.bCanCrouch (não existe mais bCanCrouch no Character).
+  MoveComp->GetNavAgentPropertiesRef().bCanCrouch = true;
+  MoveComp->MaxWalkSpeedCrouched = 200.f;
+  MoveComp->SetCrouchedHalfHeight(48.f);
+  MoveComp->bCanWalkOffLedgesWhenCrouching = false;
 }
 
 void ARupturePlayerCharacter::BeginPlay() {
   Super::BeginPlay();
+
+  // Garante crouch após defaults do BP (podem sobrescrever NavAgentProperties).
+  ConfigureCrouchSettings();
 
   if (StartingWeaponClass) {
     FActorSpawnParameters SpawnParams;
@@ -91,12 +104,6 @@ void ARupturePlayerCharacter::BeginPlay() {
   }
 }
 
-void ARupturePlayerCharacter::Tick(float DeltaTime) {
-  Super::Tick(DeltaTime);
-  // Atualiza o AimPitch para a animação
-  AimPitch = GetBaseAimRotation().Pitch;
-}
-
 void ARupturePlayerCharacter::SetupPlayerInputComponent(
     class UInputComponent *PlayerInputComponent) {
   Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -120,10 +127,18 @@ void ARupturePlayerCharacter::SetupPlayerInputComponent(
                                        &ARupturePlayerCharacter::StopFire);
     EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started,
                                        this, &ARupturePlayerCharacter::Reload);
-    EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started,
-                                       this, &ARupturePlayerCharacter::StartCrouch);
-    EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed,
-                                       this, &ARupturePlayerCharacter::StopCrouch);
+    if (CrouchAction)
+    {
+      EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started,
+                                         this, &ARupturePlayerCharacter::StartCrouch);
+      EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Completed,
+                                         this, &ARupturePlayerCharacter::StopCrouch);
+    }
+    else
+    {
+      UE_LOG(LogTemp, Error,
+             TEXT("Player: CrouchAction está None. Defina no BP_RupturePlayerCharacter."));
+    }
   }
 }
 
@@ -176,12 +191,26 @@ void ARupturePlayerCharacter::Reload(const struct FInputActionValue &Value) {
 }
 
 void ARupturePlayerCharacter::Die() {
-  // Para o tiro automático mesmo com o gatilho ainda pressionado
   if (CurrentWeapon) {
     CurrentWeapon->StopFire();
   }
 
-  Super::Die();
+  if (UCharacterMovementComponent* MoveComp = GetCharacterMovement()) {
+    MoveComp->StopMovementImmediately();
+    MoveComp->DisableMovement();
+    MoveComp->SetMovementMode(MOVE_None);
+  }
+
+  GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+  // Jogador não usa ragdoll: congela no lugar (evita cair do mapa ao morrer no ar).
+  if (USkeletalMeshComponent* MeshComp = GetMesh()) {
+    MeshComp->SetSimulatePhysics(false);
+  }
+
+  if (APlayerController* PC = Cast<APlayerController>(GetController())) {
+    DisableInput(PC);
+  }
 }
 
 void ARupturePlayerCharacter::RefillWeaponAmmo() {
@@ -212,8 +241,13 @@ void ARupturePlayerCharacter::Revive() {
   GetMesh()->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
   GetMesh()->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
 
-  if (UCharacterMovementComponent *MoveComp = GetCharacterMovement()) {
+  if (UCharacterMovementComponent* MoveComp = GetCharacterMovement()) {
+    if (bIsCrouched) {
+      UnCrouch();
+    }
+    MoveComp->bWantsToCrouch = false;
     MoveComp->SetMovementMode(MOVE_Walking);
+    MoveComp->SetDefaultMovementMode();
   }
 
   if (APlayerController *PC = Cast<APlayerController>(GetController())) {
@@ -230,10 +264,55 @@ void ARupturePlayerCharacter::StartCrouch(const FInputActionValue& Value)
 	{
 		return;
 	}
-	Crouch();
+
+	UCharacterMovementComponent* MoveComp = GetCharacterMovement();
+	if (!MoveComp)
+	{
+		return;
+	}
+
+	if (!MoveComp->CanEverCrouch())
+	{
+		ConfigureCrouchSettings();
+	}
+
+	// Toggle: um toque agacha, outro desagacha (padrão em TPS).
+	if (!bHoldToCrouch)
+	{
+		if (bIsCrouched)
+		{
+			UnCrouch();
+		}
+		else if (CanCrouch())
+		{
+			Crouch();
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning,
+				TEXT("Player: Crouch toggle bloqueado. Mode=%d OnGround=%d Falling=%d"),
+				static_cast<int32>(MoveComp->MovementMode),
+				MoveComp->IsMovingOnGround(),
+				MoveComp->IsFalling());
+		}
+		return;
+	}
+
+	if (CanCrouch())
+	{
+		Crouch();
+	}
 }
 
 void ARupturePlayerCharacter::StopCrouch(const FInputActionValue& Value)
 {
-	UnCrouch();
+	if (!bHoldToCrouch)
+	{
+		return;
+	}
+
+	if (bIsCrouched)
+	{
+		UnCrouch();
+	}
 }
