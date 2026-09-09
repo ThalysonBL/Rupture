@@ -24,7 +24,7 @@ public:
 			return;
 		}
 
-		FCoreDelegates::OnPostEngineInit.AddLambda([]()
+		FCoreDelegates::GetOnPostEngineInit().AddLambda([]()
 		{
 			FTSTicker::GetCoreTicker().AddTicker(
 				FTickerDelegate::CreateLambda([](float)
