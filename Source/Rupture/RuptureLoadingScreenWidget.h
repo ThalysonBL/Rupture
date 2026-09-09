@@ -7,7 +7,7 @@
 class UTextBlock;
 
 /** Tela de carregamento exibida durante transições de mapa. */
-UCLASS()
+UCLASS(Blueprintable)
 class RUPTURE_API URuptureLoadingScreenWidget : public UUserWidget
 {
 	GENERATED_BODY()

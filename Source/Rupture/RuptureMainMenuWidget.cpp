@@ -48,15 +48,24 @@ URuptureMainMenuWidget::URuptureMainMenuWidget(const FObjectInitializer& ObjectI
 	bHasScriptImplementedTick = true;
 }
 
+bool URuptureMainMenuWidget::CanBuildRuntimeLayout() const
+{
+	return !HasAnyFlags(RF_ClassDefaultObject) && GetWorld() != nullptr && !IsRunningCommandlet();
+}
+
 void URuptureMainMenuWidget::NativePreConstruct()
 {
 	Super::NativePreConstruct();
-	EnsureHostOverlay();
 }
 
 void URuptureMainMenuWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	if (!CanBuildRuntimeLayout())
+	{
+		return;
+	}
 
 	BuildCinematicLayout();
 	BindButtonCallbacks();

@@ -7,7 +7,7 @@
 class URuptureLoadingScreenWidget;
 
 /** Gerencia transições de mapa com tela de carregamento. */
-UCLASS()
+UCLASS(Blueprintable)
 class RUPTURE_API URuptureGameInstance : public UGameInstance
 {
 	GENERATED_BODY()

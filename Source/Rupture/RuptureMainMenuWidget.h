@@ -10,7 +10,7 @@ class UOverlay;
 class UTextBlock;
 class UVerticalBox;
 
-UCLASS()
+UCLASS(Blueprintable)
 class RUPTURE_API URuptureMainMenuWidget : public UUserWidget
 {
 	GENERATED_BODY()
@@ -61,6 +61,7 @@ protected:
 	float FadeInDuration = 1.15f;
 
 private:
+	bool CanBuildRuntimeLayout() const;
 	void BuildCinematicLayout();
 	void BindButtonCallbacks();
 	void ApplyGhostButtonStyle(UButton* Button, UTextBlock* Label, bool bPrimary) const;

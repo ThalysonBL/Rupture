@@ -50,6 +50,11 @@ void URuptureDeathScreenWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	if (HasAnyFlags(RF_ClassDefaultObject) || !GetWorld() || IsRunningCommandlet())
+	{
+		return;
+	}
+
 	BuildCinematicLayout();
 	BindButtonCallbacks();
 }
