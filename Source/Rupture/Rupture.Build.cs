@@ -11,6 +11,11 @@ public class Rupture : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Niagara", "AIModule", "Slate", "SlateCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
+
+		if (Target.bBuildEditor)
+		{
+			PrivateDependencyModuleNames.Add("ModelContextProtocolEngine");
+		}
 		
 		// Uncomment if you are using online features
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");

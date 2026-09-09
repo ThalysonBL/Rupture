@@ -7,6 +7,7 @@
 #include "Containers/Ticker.h"
 #include "Engine/Engine.h"
 #include "Misc/CoreDelegates.h"
+#include "ModelContextProtocolSettings.h"
 #endif
 
 /**
@@ -21,6 +22,10 @@ public:
 #if WITH_EDITOR
 		if (IsRunningCommandlet())
 		{
+			if (UModelContextProtocolSettings* Settings = GetMutableDefault<UModelContextProtocolSettings>())
+			{
+				Settings->bAutoStartServer = false;
+			}
 			return;
 		}
 
